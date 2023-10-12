@@ -12,13 +12,14 @@ openai.api_key = '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'
 #function which provide answer from Open Ai machine
 def get_completion(prompt, model="gpt-3.5-turbo"):
 
-    messages = [{"role": "user", "content": prompt}] # creating a request
+    messages = [{"role": "user", "content": prompt}] # creating a request to the server 
 
     response = openai.ChatCompletion.create(model=model, messages=messages, temperature=0,) # send a request 
 
     return response.choices[0].message["content"] # get a response and return it
 
-#main function which will be used in the bot
+
+#main function which will be used in the bot ( we send a request to it from the main.py (promt - question which we request) )
 def question_gpt(promt):
 
     try:
