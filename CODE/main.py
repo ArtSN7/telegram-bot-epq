@@ -21,8 +21,7 @@ async def help_command(update, context):
 async def start_command(update, context):
     user = update.effective_user
 
-    await update.message.reply_html(rf"Hello, {user.mention_html()}!\n\nI am AUXXIbot, but friends call me AUX, so you can call me like this ;D\n\nI am your personal assistant that can simplify your life, moreover, you can ask me whatever you want and recieve an answer!",
-                                    reply_markup=markup)
+    await update.message.reply_html(f"Hello, {user.mention_html()}!\n\nI am AUXXIbot, but friends call me AUX, so you can call me like this ;D\n\nI am your personal assistant that can simplify your life, moreover, you can ask me whatever you want and recieve an answer!\n\nTo see more of my power try /help button :)")
 
 
 
@@ -48,7 +47,7 @@ def main():
 # part of the code that set up the environmet 
 if __name__ == '__main__':
     
-    db_session.global_init("db/blogs.db") # connecting database in the main code
+    #db_session.global_init("db/blogs.db") # connecting database in the main code
 
 
     if os.name == 'nt':
