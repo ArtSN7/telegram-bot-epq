@@ -12,4 +12,4 @@ class User(SqlAlchemyBase):
 
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
-    count = sqlalchemy.Column(sqlalchemy.Integer, nullable=True, default=0)
+    date = sqlalchemy.Column(sqlalchemy.DATE, nullable=True, default=0)
