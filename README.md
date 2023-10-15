@@ -10,3 +10,9 @@ In the folder named ESSAY you are able to find my story about how the tg-bot had
 
 
 server: heroku
+
+
+functions:
+
+help - provides information about bot's abilities
+gpt - ask whatever you want for free using famous OpenAI creation

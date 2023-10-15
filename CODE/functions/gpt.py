@@ -1,12 +1,12 @@
 # chat-gpt function with open-ai API
-
+from data import config
 import openai
 import os
 import pandas as pd
 import time
 
 #open-ai key
-openai.api_key = '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'
+openai.api_key = config.gpt_key
 
 
 #function which provide answer from Open Ai machine
@@ -26,7 +26,8 @@ def question_gpt(promt):
         response = get_completion(promt) # get response from chat-gpt
         return response # return it to user
     
-    except Exception: # if there is a mistake, we return text about it 
+    except Exception as e: # if there is a mistake, we return text about it 
+        print(e)
         return "Error on the server - developers will try to fix it as fast as possible. Sorry for discomfort"
 
 

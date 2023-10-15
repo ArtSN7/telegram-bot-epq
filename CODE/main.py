@@ -10,17 +10,27 @@ from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 
+from data import config
+
+from functions import gpt
+
+#------------------------------------------------------------------
 
 reply_keyboard = [['/help']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 
+#------------------------------------------------------------------
 
+
+#------------------------------------------------------------------
+# help function wich explains abilities of all functions in the bot
 async def help_command(update, context):
     await update.message.reply_text('1')
 
 
-# start
+#------------------------------------------------------------------
+# start function which is called after user use bot for the first time
 async def start_command(update, context):
     user = update.effective_user # getting user info from telegram
 
@@ -44,15 +54,46 @@ async def start_command(update, context):
 
 
 
+#------------------------------------------------------------------
+# chat-gpt function
+async def gpt_command(update, context):
+    await update.message.reply_text('Please, send a message with your question.')
+    return 1
+
+async def message_answer(update, context):
+    txt = update.message.text
+    answer = gpt.question_gpt(txt)
+    await update.message.reply_text("Wait for a little bit... We are looking for the best answer!")
+    await update.message.reply_html(rf"{answer}", reply_markup=markup)
+    return ConversationHandler.END
+
+
+#------------------------------------------------------------------
+# function that stops dialogue with user
+async def stop(update, context):
+    return ConversationHandler.END
+
+
+#------------------------------------------------------------------
+# functions that controls all the activity in the bot
 def main():
-    # create an Application object
-    # inserting bot's token which was given in the BotFather as a string 
-    application = Application.builder().token("6534440693:AAEBK22bypwmKrjI8SGczQG85fmkLjjb4no").build()
+    # create an Application object with specific telegram key which I recieved from BotFather
+    application = Application.builder().token(config.tg_key).build()
 
 
     # registrating command handler in order to check what buttons were pressed
+
     application.add_handler(CommandHandler("start", start_command)) # /start command
     application.add_handler(CommandHandler("help", help_command)) # /help command
+
+    conv_handler_gpt = ConversationHandler( # /GPT command
+        entry_points=[CommandHandler("gpt", gpt_command)],
+        states={
+            1: [MessageHandler(filters.TEXT, message_answer)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler_gpt)
 
     # starting application
     application.run_polling()
@@ -61,6 +102,7 @@ def main():
 
 
 
+#------------------------------------------------------------------
 if __name__ == '__main__': # part of the code that set up the environmet 
     
     db_session.global_init("code/db/data.db") # connecting database in the main code code/db/data.db - path to reach the file
