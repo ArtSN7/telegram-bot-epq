@@ -23,11 +23,10 @@ async def quote():
     img_url = await get_wiki_image(author) # getting url of image of author of quote by sending his name to the function 
 
     # just creating response text for the user which will be send by bot
-    text = f"{author} - \n\n" 
-    text += txt
+    text = f"'{txt}',- {author}" 
 
-    if img_url == '0': # if there is a mistake on the server or there is no image in the wikipedia, there will be no image
-        return text, 'Image of author was not found :('
+    if img_url == '0': # if there is a mistake on the server or there is no image in the wikipedia, there will be no link returned
+        return text, ''
 
     return text, img_url # returing response and url of image 
 

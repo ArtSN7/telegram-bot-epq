@@ -12,7 +12,7 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 
 from data import config
 
-from functions import gpt
+from functions import gpt, quote
 
 #------------------------------------------------------------------
 
@@ -68,6 +68,18 @@ async def message_answer(update, context):
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
+
+#------------------------------------------------------------------
+# quote function
+async def quote_command(update, context):
+    func = quote.quote() # declaring function call ( procedure that is needed to work with async requests )
+    answer = await func # getting response from function
+    await update.message.reply_text(f'{answer[0]}') # sending random quote to user
+
+    if answer[1] != "": # if there is a link with author's photo, then we send it
+        await context.bot.send_message(update.message.chat_id, text=answer[1]) # sending link to the photo ( tg will represent it )
+
+
 #------------------------------------------------------------------
 # function that stops dialogue with user
 async def stop(update, context):
@@ -86,6 +98,7 @@ def main():
 
     application.add_handler(CommandHandler("start", start_command)) # adding /start command
     application.add_handler(CommandHandler("help", help_command)) # adding /help command
+    application.add_handler(CommandHandler("quote", quote_command)) # adding /quote command
 
     #------------------------------------------------------------------
     conv_handler_gpt = ConversationHandler( # /gpt command
