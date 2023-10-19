@@ -16,8 +16,8 @@ from functions import gpt, quote
 
 #------------------------------------------------------------------
 
-reply_keyboard = [['/help']]
-markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+#reply_keyboard = [['/help']]
+#markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
 
 #------------------------------------------------------------------
