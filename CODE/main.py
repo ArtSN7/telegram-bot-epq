@@ -16,8 +16,9 @@ from functions import gpt, quote
 
 #------------------------------------------------------------------
 
-#reply_keyboard = [['/help']]
-#markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+# options which will be shown after using time command
+#reply_keyboard_time = [[''], [''], [''], ['']]
+#markup_time = ReplyKeyboardMarkup(reply_keyboard_time, one_time_keyboard=True)
 
 
 #------------------------------------------------------------------
@@ -78,6 +79,11 @@ async def quote_command(update, context):
 
     if answer[1] != "": # if there is a link with author's photo, then we send it
         await context.bot.send_message(update.message.chat_id, text=answer[1]) # sending link to the photo ( tg will represent it )
+
+#------------------------------------------------------------------
+
+
+    
 
 
 #------------------------------------------------------------------
