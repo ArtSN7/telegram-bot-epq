@@ -14,6 +14,6 @@ class User(SqlAlchemyBase):
 
     date = sqlalchemy.Column(sqlalchemy.DATE, nullable=True, default=0)
 
-    time_first_choice = sqlalchemy.Column(sqlalchemy.String, nullable=True, default="Europe/London")
-    time_second_choice = sqlalchemy.Column(sqlalchemy.String, nullable=True, default="America/Los_Angeles")
-    time_third_choice = sqlalchemy.Column(sqlalchemy.String, nullable=True, default="Asia/Hong_Kong")
+    news_first_choice = sqlalchemy.Column(sqlalchemy.String, nullable=True, default="Europe/London")
+    news_second_choice = sqlalchemy.Column(sqlalchemy.String, nullable=True, default="America/Los_Angeles")
+    news_third_choice = sqlalchemy.Column(sqlalchemy.String, nullable=True, default="Asia/Hong_Kong")
