@@ -1,4 +1,4 @@
-# function which get a random quote
+# function which gets a random quote
 
 import requests
 from .wikipedia_get_photo import get_wiki_image
@@ -23,7 +23,7 @@ async def quote():
     img_url = await get_wiki_image(author) # getting url of image of author of quote by sending his name to the function 
 
     # just creating response text for the user which will be send by bot
-    text = f"'{txt}',- {author}" 
+    text = f'"{txt}" - {author}'
 
     if img_url == '0': # if there is a mistake on the server or there is no image in the wikipedia, there will be no link returned
         return text, ''

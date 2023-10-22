@@ -1,4 +1,4 @@
-# function which provide information about time
+# function which provides information about time
 
 import os
 import asyncio

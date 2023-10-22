@@ -12,14 +12,16 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 
 from data import config
 
-from functions import gpt, quote
+from functions import gpt, quote, weather
 
 #------------------------------------------------------------------
 
-# options which will be shown after using time command
-#reply_keyboard_time = [[''], [''], [''], ['']]
-#markup_time = ReplyKeyboardMarkup(reply_keyboard_time, one_time_keyboard=True)
+btn_loc = KeyboardButton('SEND A LOCATION', request_location=True) # button which will ask user to send a location
+markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True, resize_keyboard=True) # function which will show this button
 
+coords_button = KeyboardButton('/coordinates')
+address_button = KeyboardButton('/address')
+markup_weather_options = ReplyKeyboardMarkup([[address_button],[coords_button]], one_time_keyboard=True, resize_keyboard=True) # showing weather option buttons
 
 #------------------------------------------------------------------
 
@@ -80,9 +82,38 @@ async def quote_command(update, context):
     if answer[1] != "": # if there is a link with author's photo, then we send it
         await context.bot.send_message(update.message.chat_id, text=answer[1]) # sending link to the photo ( tg will represent it )
 
+
+
 #------------------------------------------------------------------
+# weather function
 
+async def weather_command(update, context):
+    await update.message.reply_html(rf"Please, choose how you will send us your location ( by sending text address or by sharing your location using button )",
+                                    reply_markup=markup_weather_options)
 
+async def weather_command_coords(update, context):
+    await update.message.reply_html(rf"To analyse data, you need to send your current location.",
+                                    reply_markup=markup_weather_loc)
+    return 1
+
+async def weather_command_address(update, context):
+    await update.message.reply_html(rf"To analyse data, you need to send address")
+    return 1
+
+async def weather_command_response_coords(update, context): # function which works with longitude and latitude 
+    long, lang = update.message.location.longitude, update.message.location.latitude # getting user coordinates 
+    func = weather.weather_coords((long, lang)) # calling function
+    answer = await func # getting response 
+    await update.message.reply_text(f"{answer}") # sending response to the user
+    return ConversationHandler.END # ending conversation
+
+async def weather_command_response_address(update, context): # function which works with address
+    func = weather.weather_address(update.message.text) # calling function
+    answer = await func # getting answer
+    await update.message.reply_text(f"{answer}") # sending response to the user
+    return ConversationHandler.END # ending conversation 
+
+#------------------------------------------------------------------
     
 
 
@@ -106,9 +137,33 @@ def main():
     application.add_handler(CommandHandler("help", help_command)) # adding /help command
     application.add_handler(CommandHandler("quote", quote_command)) # adding /quote command
 
+
+
+    #------------------------------------------------------------------
+    application.add_handler(CommandHandler("weather", weather_command)) # adding /weather command which will start all weather process
+
+    conv_handler_weather = ConversationHandler( # /weather command with coordinates
+        entry_points=[CommandHandler("coordinates", weather_command_coords)], # declaring the function which will start the conversation if weather command is called
+        states={
+            1: [MessageHandler(filters.LOCATION & ~filters.COMMAND, weather_command_response_coords)], # after next message this function will be called ( user must send location message )
+        },
+        fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
+    )
+    application.add_handler(conv_handler_weather) # adding /weather command with address
+
+    conv_handler_weather_address = ConversationHandler( # /weather command with coordinates
+        entry_points=[CommandHandler("address", weather_command_address)], # declaring the function which will start the conversation if weather command is called
+        states={
+            1: [MessageHandler(filters.TEXT, weather_command_response_address)], # after next message this function will be called ( user must send location message )
+        },
+        fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
+    )
+    application.add_handler(conv_handler_weather_address) # adding /weather command
+    #------------------------------------------------------------------
+
     #------------------------------------------------------------------
     conv_handler_gpt = ConversationHandler( # /gpt command
-        entry_points=[CommandHandler("gpt", gpt_command)], # declaring the function which will start the conversation if gpt command will be called
+        entry_points=[CommandHandler("gpt", gpt_command)], # declaring the function which will start the conversation if gpt command is called
         states={
             1: [MessageHandler(filters.TEXT, message_answer)], # after next message this function will be called ( user must send text message )
         },
