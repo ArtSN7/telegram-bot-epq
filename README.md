@@ -18,3 +18,4 @@ help - provides information about bot's abilities
 gpt - ask whatever you want for free using famous OpenAI creation
 quote - gives you a quote said by different people from different time
 weather - gives an information about weather at the specific location
+news - provides an opportunity to see news all around the world

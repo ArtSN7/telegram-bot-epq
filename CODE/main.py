@@ -12,10 +12,10 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 
 from data import config
 
-from functions import gpt, quote, weather
+from functions import gpt, quote, weather, news
 
 #------------------------------------------------------------------
-
+# weather buttond
 btn_loc = KeyboardButton('SEND A LOCATION', request_location=True) # button which will ask user to send a location
 markup_weather_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True, resize_keyboard=True) # function which will show this button
 
@@ -24,6 +24,12 @@ address_button = KeyboardButton('/address')
 markup_weather_options = ReplyKeyboardMarkup([[address_button],[coords_button]], one_time_keyboard=True, resize_keyboard=True) # showing weather option buttons
 
 #------------------------------------------------------------------
+# news buttons 
+reply_keyboard_news = [['/specific_news'], ['/general_news']]
+markup_news = ReplyKeyboardMarkup(reply_keyboard_news, one_time_keyboard=True, resize_keyboard=True)
+
+reply_keyboard_news_topic = [['/general'], ['/business'], ['/entertainment'], ['/health'], ['/science'], ['/sports'],['/technology']]
+markup_news_topic = ReplyKeyboardMarkup(reply_keyboard_news_topic, one_time_keyboard=True, resize_keyboard=True)
 
 
 #------------------------------------------------------------------
@@ -114,7 +120,131 @@ async def weather_command_response_address(update, context): # function which wo
     return ConversationHandler.END # ending conversation 
 
 #------------------------------------------------------------------
-    
+# news function 
+async def news_command(update, context):
+    await update.message.reply_html(rf"Please, choose the type of news you want to see.", reply_markup=markup_news) # chose between general and specific
+
+
+async def general_news(update, context):
+    await update.message.reply_html(rf"Please, choose interesting topic.", reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
+
+# functions connected to different topics
+async def business(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    language = person.language # getting user's language
+
+    func = news.get_news('business', language)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+
+
+async def entertainment(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    language = person.language # getting user's language
+
+    func = news.get_news('entertainment', language)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+
+
+async def general(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    language = person.language # getting user's language
+
+    func = news.get_news('general', language)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+
+
+async def health(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    language = person.language # getting user's language
+
+    func = news.get_news('health', language)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+
+
+async def science(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    language = person.language # getting user's language
+
+    func = news.get_news('science', language)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+
+
+async def sports(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    language = person.language # getting user's language
+
+    func = news.get_news('sports', language)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+
+
+async def technology(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    language = person.language # getting user's language
+
+    func = news.get_news('technology', language)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+
+
+async def specific_news(update, context):
+    await update.message.reply_text("Enter the topic you are interested in (for example, Microsoft)")
+    return 1
+
+
+async def specific_news_response(update, context):
+
+    func = news.get_spec_news(update.message.text)
+    answer = await func
+    await update.message.reply_text(f"{answer}")
+    return ConversationHandler.END
 
 
 #------------------------------------------------------------------
@@ -140,6 +270,7 @@ def main():
 
 
     #------------------------------------------------------------------
+    # WEATHER COMMAND
     application.add_handler(CommandHandler("weather", weather_command)) # adding /weather command which will start all weather process
 
     conv_handler_weather = ConversationHandler( # /weather command with coordinates
@@ -162,6 +293,7 @@ def main():
     #------------------------------------------------------------------
 
     #------------------------------------------------------------------
+    # GPT COMMAND
     conv_handler_gpt = ConversationHandler( # /gpt command
         entry_points=[CommandHandler("gpt", gpt_command)], # declaring the function which will start the conversation if gpt command is called
         states={
@@ -171,7 +303,24 @@ def main():
     )
     application.add_handler(conv_handler_gpt) # adding /gpt command
     #------------------------------------------------------------------
-
+    # NEWS COMMAND
+    application.add_handler(CommandHandler("news", news_command))
+    application.add_handler(CommandHandler("general_news", general_news))
+    application.add_handler(CommandHandler("business", business))
+    application.add_handler(CommandHandler("entertainment", entertainment))
+    application.add_handler(CommandHandler("general", general))
+    application.add_handler(CommandHandler("health", health))
+    application.add_handler(CommandHandler("science", science))
+    application.add_handler(CommandHandler("sports", sports))
+    application.add_handler(CommandHandler("technology", technology))
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('specific_news', specific_news)],
+        states={
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, specific_news_response)],
+        },
+        fallbacks=[CommandHandler('stop', stop)]
+    )
+    application.add_handler(conv_handler)
 
     #------------------------------------------------------------------
     # starting application
