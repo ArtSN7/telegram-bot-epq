@@ -1,4 +1,4 @@
-# function which 
+# function which show news
 
 import requests
 import os

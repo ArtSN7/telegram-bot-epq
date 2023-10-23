@@ -12,7 +12,7 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 
 from data import config
 
-from functions import gpt, quote, weather, news
+from functions import gpt, quote, weather, news, recipes
 
 #------------------------------------------------------------------
 # weather buttond
@@ -30,6 +30,19 @@ markup_news = ReplyKeyboardMarkup(reply_keyboard_news, one_time_keyboard=True, r
 
 reply_keyboard_news_topic = [['/general'], ['/business'], ['/entertainment'], ['/health'], ['/science'], ['/sports'],['/technology']]
 markup_news_topic = ReplyKeyboardMarkup(reply_keyboard_news_topic, one_time_keyboard=True, resize_keyboard=True)
+
+#------------------------------------------------------------------
+# recipes buttons 
+
+# types of request
+reply_keyboard_recipe_type = [['/cuisines'], ['/ingredients'], ['/dish_name']]
+markup_recipe_type = ReplyKeyboardMarkup(reply_keyboard_recipe_type, one_time_keyboard=True, resize_keyboard=True)
+
+# cuisines 
+reply_keyboard_cuisine_type = [['/Italian'], ['/British'], ['/Chinese'], ['/European'], ['/French'], ['/German'],['/Greek'], ['/Indian'],['/Japanese'], ['/Korean'],
+                               ['/Mexican'], ['/Thai']]
+markup_cuisine_type = ReplyKeyboardMarkup(reply_keyboard_cuisine_type, one_time_keyboard=True, resize_keyboard=True)
+
 
 
 #------------------------------------------------------------------
@@ -128,7 +141,7 @@ async def news_command(update, context):
 async def general_news(update, context):
     await update.message.reply_html(rf"Please, choose interesting topic.", reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
 
-# functions connected to different topics
+# functions connected to the different topics
 async def business(update, context):
     user = update.effective_user # getting user info from telegram
 
@@ -248,6 +261,119 @@ async def specific_news_response(update, context):
 
 
 #------------------------------------------------------------------
+# recipes function
+async def recipes_command(update, context):
+    await update.message.reply_html(rf"Please, choose by which parameter you want to choose recipe", reply_markup=markup_recipe_type) # chose between different types of request
+
+
+
+async def cuisine_command(update, context):
+    await update.message.reply_html(rf"Please, choose the type of cuisine you are interested in.", reply_markup=markup_cuisine_type) # chose between different cuisines
+
+# adding different cuisines
+async def italian_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Italian")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def british_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("British")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def chinese_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Chinese")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def european_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("European")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def french_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("French")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def german_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("German")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def greek_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Greek")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def indian_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Idian")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def japanese_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Japanese")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def korean_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Korean")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def mexican_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Mexican")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+async def thai_cuisine(update, context):
+    func = recipes.get_rec_by_cuisine("Thai")
+    answer, url = await func
+    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{url}")
+
+# dish name 
+async def dish_name(update, context):
+    await update.message.reply_text(f"Please, send me a name of the dish you want to cook, for example, pasta.")
+    return 1 # showing bot that next message must be read by dish_name_response function
+
+async def dish_name_response(update, context):
+    txt = update.message.text # gettin text which was sent by user
+    answer, url = await recipes.get_rec_by_name(txt) # sending a request
+
+    await update.message.reply_text(f"{answer}") # sending an answer to user
+    await update.message.reply_text(f"{url}") # sending picture
+    return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
+
+# ingredients 
+# dish name 
+async def ingredients(update, context):
+    await update.message.reply_text(f"Please, send me name of ingredients in format name1,name2,name3... , where name1 is a name of ingredient.")
+    return 1 # showing bot that next message must be read by dish_name_response function
+
+async def ingredient_response(update, context):
+    txt = update.message.text # gettin text which was sent by user
+    answer, url = await recipes.get_rec_by_ingredients(txt) # sending a request
+
+    await update.message.reply_text(f"{answer}") # sending an answer to user
+    await update.message.reply_text(f"{url}") # sending picture
+    return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
+
+
+
+
+#------------------------------------------------------------------
 # function that stops dialogue with user
 async def stop(update, context):
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
@@ -260,12 +386,13 @@ def main():
     application = Application.builder().token(config.tg_key).build()
     #------------------------------------------------------------------
 
-
+    #------------------------------------------------------------------
     # registrating command handler in order to check what buttons were pressed
 
     application.add_handler(CommandHandler("start", start_command)) # adding /start command
     application.add_handler(CommandHandler("help", help_command)) # adding /help command
     application.add_handler(CommandHandler("quote", quote_command)) # adding /quote command
+    #------------------------------------------------------------------
 
 
 
@@ -303,6 +430,8 @@ def main():
     )
     application.add_handler(conv_handler_gpt) # adding /gpt command
     #------------------------------------------------------------------
+
+    #------------------------------------------------------------------
     # NEWS COMMAND
     application.add_handler(CommandHandler("news", news_command))
     application.add_handler(CommandHandler("general_news", general_news))
@@ -321,6 +450,50 @@ def main():
         fallbacks=[CommandHandler('stop', stop)]
     )
     application.add_handler(conv_handler)
+    #------------------------------------------------------------------
+    # RECIPES COMMAND
+
+    application.add_handler(CommandHandler("recipes", recipes_command))
+
+    # cuisines 
+    application.add_handler(CommandHandler("cuisines", cuisine_command))
+    application.add_handler(CommandHandler("Italian", italian_cuisine))
+    application.add_handler(CommandHandler("British", british_cuisine))
+    application.add_handler(CommandHandler("Chinese", chinese_cuisine))
+    application.add_handler(CommandHandler("European", european_cuisine))
+    application.add_handler(CommandHandler("French", french_cuisine))
+    application.add_handler(CommandHandler("German", german_cuisine))
+    application.add_handler(CommandHandler("Greek", greek_cuisine))
+    application.add_handler(CommandHandler("Indian", indian_cuisine))
+    application.add_handler(CommandHandler("Japanese", japanese_cuisine))
+    application.add_handler(CommandHandler("Korean", korean_cuisine))
+    application.add_handler(CommandHandler("Mexican", mexican_cuisine))
+    application.add_handler(CommandHandler("Thai", thai_cuisine))
+
+    # dish_name
+    conv_handler_dish_name = ConversationHandler( # /dish_name command
+        entry_points=[CommandHandler("dish_name", dish_name)], # declaring the function which will start the conversation if dish_name had been called
+        states={
+            1: [MessageHandler(filters.TEXT, dish_name_response)], # after next message this function will be called ( user must send text message )
+        },
+        fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
+    )
+    application.add_handler(conv_handler_dish_name) # adding /dish_name command
+
+    # ingredients
+    conv_handler_ingredients = ConversationHandler( # /dish_name command
+        entry_points=[CommandHandler("ingredients", ingredients)], # declaring the function which will start the conversation if ingredients had been called
+        states={
+            1: [MessageHandler(filters.TEXT, ingredient_response)], # after next message this function will be called ( user must send text message )
+        },
+        fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
+    )
+    application.add_handler(conv_handler_ingredients) # adding /ingredients command
+    #------------------------------------------------------------------
+
+
+
+
 
     #------------------------------------------------------------------
     # starting application
