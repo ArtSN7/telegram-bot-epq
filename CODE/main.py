@@ -12,7 +12,7 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 
 from data import config
 
-from functions import gpt, quote, weather, news, recipes
+from functions import gpt, quote, weather, news, recipes, events
 
 #------------------------------------------------------------------
 # weather buttond
@@ -42,6 +42,20 @@ markup_recipe_type = ReplyKeyboardMarkup(reply_keyboard_recipe_type, one_time_ke
 reply_keyboard_cuisine_type = [['/Italian'], ['/British'], ['/Chinese'], ['/European'], ['/French'], ['/German'],['/Greek'], ['/Indian'],['/Japanese'], ['/Korean'],
                                ['/Mexican'], ['/Thai']]
 markup_cuisine_type = ReplyKeyboardMarkup(reply_keyboard_cuisine_type, one_time_keyboard=True, resize_keyboard=True)
+
+#------------------------------------------------------------------
+# evetns buttond
+markup_event_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True, resize_keyboard=True) # function which will show this button
+
+reply_keyboard_events_type = [['/Real'], ['/Virtual']]
+markup_events_type = ReplyKeyboardMarkup(reply_keyboard_events_type, one_time_keyboard=True, resize_keyboard=True)
+
+reply_keyboard_events_date = [['/Today'], ['/Tomorrow'], ['/This_week'], ['/Next_week'], ['/All_dates']]
+markup_events_date = ReplyKeyboardMarkup(reply_keyboard_events_date, one_time_keyboard=True, resize_keyboard=True)
+#------------------------------------------------------------------
+
+
+
 
 
 
@@ -74,6 +88,57 @@ async def start_command(update, context):
     # sending message as an asnwer to the start button
     await update.message.reply_html(f"Hello, {user.mention_html()}!\n\nI am AUXXIbot, but friends call me AUX, so you can call me like this ;D\n\nI am your personal assistant that can simplify your life, moreover, you can ask me whatever you want and recieve an answer!\n\nTo see more of my power try /help button :)")
 
+
+
+#------------------------------------------------------------------
+# events function
+
+async def events_command(update, context):
+    await update.message.reply_html(rf"To find events near you, please, send us your location!", reply_markup=markup_event_loc)
+    return 1
+
+
+async def events_response(update, context):
+
+    long, lat = update.message.location.longitude, update.message.location.latitude # getting user coordinates 
+
+    context.user_data['long'] = long
+    context.user_data['lat'] = lat
+    await update.message.reply_html(rf"Please, choose the type of event!",
+                                    reply_markup=markup_events_type)
+
+    return ConversationHandler.END
+
+async def real_event_type(update, context): # if event type is real
+    context.user_data['type'] = "Real"
+    await update.message.reply_html(rf"Please, now choose the date of event!",
+                                    reply_markup=markup_events_date)
+    
+async def virtual_event_type(update, context): # if event type is virtual
+    context.user_data['type'] = "Virtual"
+    await update.message.reply_html(rf"Please, now choose the date of event!",
+                                    reply_markup=markup_events_date)
+
+
+async def today_event(update, context): 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "today")
+    await update.message.reply_text(f"{answer}") 
+
+async def tomorrow_event(update, context): 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "tomorrow")
+    await update.message.reply_text(f"{answer}") 
+
+async def this_week_event(update, context): 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "week")
+    await update.message.reply_text(f"{answer}") 
+
+async def next_week_event(update, context): 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "next_week")
+    await update.message.reply_text(f"{answer}") 
+
+async def all_event(update, context): 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "all")
+    await update.message.reply_text(f"{answer}")  
 
 
 #------------------------------------------------------------------
@@ -451,6 +516,8 @@ def main():
     )
     application.add_handler(conv_handler)
     #------------------------------------------------------------------
+
+    #------------------------------------------------------------------
     # RECIPES COMMAND
 
     application.add_handler(CommandHandler("recipes", recipes_command))
@@ -491,7 +558,30 @@ def main():
     application.add_handler(conv_handler_ingredients) # adding /ingredients command
     #------------------------------------------------------------------
 
+    #------------------------------------------------------------------
+    # EVENTS COMMAND
 
+    conv_handler_events = ConversationHandler( # /events command 
+        entry_points=[CommandHandler("events", events_command)], # declaring the function which will start the conversation if events command is called
+        states={
+            1: [MessageHandler(filters.LOCATION & ~filters.COMMAND, events_response)], # after next message this function will be called ( user must send location message )
+        },
+        fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
+    )
+    application.add_handler(conv_handler_events) # adding /events command with address
+
+
+    # types of event
+    application.add_handler(CommandHandler("Real", real_event_type))
+    application.add_handler(CommandHandler("Virtual", virtual_event_type))
+
+    # dates of event
+    application.add_handler(CommandHandler("Today", today_event))
+    application.add_handler(CommandHandler("Tomorrow", tomorrow_event))
+    application.add_handler(CommandHandler("This_week", this_week_event))
+    application.add_handler(CommandHandler("Next_week", next_week_event))
+    application.add_handler(CommandHandler("All_dates", all_event))
+    #------------------------------------------------------------------
 
 
 

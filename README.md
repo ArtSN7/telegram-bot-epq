@@ -20,3 +20,4 @@ quote - gives you a quote said by different people from different time
 weather - gives an information about weather at the specific location
 news - provides an opportunity to see news all around the world
 recipes - help you to choose right dish for your event
+events - finds events near your current location
