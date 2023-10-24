@@ -1,7 +1,7 @@
 # Telegram-BOT
 
-<img src="https://raw.githubusercontent.com/python-telegram-bot/logos/master/logo/png/ptb-logo_240.png" width="128"/><img src="https://www.python.org/static/img/psf-logo@2x.png" width="512"/>
-
+<img src="https://raw.githubusercontent.com/python-telegram-bot/logos/master/logo/png/ptb-logo_240.png" width="128"/><img src="https://www.python.org/static/img/psf-logo@2x.png" width="512"/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/242px-Telegram_2019_Logo.svg.png
+" width="128"/>
 
 
 ## Guide of my repository
