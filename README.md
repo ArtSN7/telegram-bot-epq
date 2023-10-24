@@ -1,6 +1,6 @@
 # Telegram-BOT
 
-<img src="https://raw.githubusercontent.com/python-telegram-bot/logos/master/logo/png/ptb-logo_240.png" width="128"/><img src="https://www.python.org/static/img/psf-logo@2x.png" width="356", height="128/>
+<img src="https://raw.githubusercontent.com/python-telegram-bot/logos/master/logo/png/ptb-logo_240.png" width="128"/><img src="https://www.python.org/static/img/psf-logo@2x.png" width="356", height="128"/>
 
 
 
