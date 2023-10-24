@@ -1,5 +1,6 @@
 # Telegram-BOT
 
+https://raw.githubusercontent.com/python-telegram-bot/logos/master/logo/png/ptb-logo_240.png
 
 ## Guide of my repository
 
