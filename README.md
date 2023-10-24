@@ -8,10 +8,6 @@ In the folder named CODE you are able to find DB, code of all the functions and 
 
 In the folder named ESSAY you are able to find my story about how the tg-bot had been done step by step.
 
-
-server: heroku
-
------------------------------------------------------------------------
 ## Resources
 ---
 
@@ -62,7 +58,6 @@ https://spoonacular.com/food-api/docs#Search-Recipes-by-Ingredients
 **[• Events](https://serpapi.com/google-events-api)**
 
 
------------------------------------------------------------------------
 ## FUNCTIONS:
 
 
