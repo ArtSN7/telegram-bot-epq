@@ -1,4 +1,5 @@
 # EPQ_PR
+
 Computer Science project for A-level EPQ made by Artem Sorokin.
 
 
@@ -9,20 +10,19 @@ In the folder named CODE you are able to find DB, code of all the functions and 
 In the folder named ESSAY you are able to find my story about how the tg-bot had been done step by step.
 
 ## Resources
----
 
 **[• Library documentation](https://docs.python-telegram-bot.org/en/v20.6/)**
 
----
+--
 
----
 
 **[• Server](https://glitch.com/)**
 
----
+--
 
 **[• GPT](https://platform.openai.com/docs/guides/gpt)**
 
+--
 
 **[• Weather](https://openweathermap.org/api)**
 
