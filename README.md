@@ -13,11 +13,17 @@ server: heroku
 
 -----------------------------------------------------------------------
 ## Resources
+---
 
 **[• Library documentation](https://docs.python-telegram-bot.org/en/v20.6/)**
 
+---
+
+---
+
 **[• Server](https://glitch.com/)**
 
+---
 
 **[• GPT](https://platform.openai.com/docs/guides/gpt)**
 
