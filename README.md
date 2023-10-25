@@ -13,6 +13,7 @@ In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** 
     • db - place where the database is stored
     • data - there are files which help running the bot
 
+
 ## Resources 
 
 --
