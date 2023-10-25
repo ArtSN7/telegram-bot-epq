@@ -4,6 +4,7 @@ import requests
 import aiohttp
 import asyncio
 import os
+import random
 from data import config
 
 
@@ -41,10 +42,10 @@ async def searching_events(type_of_req, town, htichips): # if type_of_req == 1, 
     try:
         if type_of_req == 2:
             req = await get_response("https://serpapi.com/search.json?", 
-                                     params={'engine': 'google_events', 'api_key': serp_key, 'hl': 'en', 'q': f'Events in {town}', 'htichips': htichips})
+                                     params={'engine': 'google_events', 'api_key': serp_key[random.randint(0, 2)], 'hl': 'en', 'q': f'Events in {town}', 'htichips': htichips})
         else:
             req = await get_response("https://serpapi.com/search.json?", 
-                                     params={'engine': 'google_events', 'api_key': serp_key, 'hl': 'en', 'q': f'Events in {town}'})
+                                     params={'engine': 'google_events', 'api_key': serp_key[random.randint(0, 2)], 'hl': 'en', 'q': f'Events in {town}'})
             
         data = req 
 
