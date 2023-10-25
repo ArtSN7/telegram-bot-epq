@@ -3,14 +3,16 @@
 <img src="https://raw.githubusercontent.com/python-telegram-bot/logos/master/logo/png/ptb-logo_240.png" width="128"/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/242px-Telegram_2019_Logo.svg.png" width="128"/><img src="https://www.python.org/static/img/psf-logo@2x.png" width="512"/>
 
 
-## Guide of my repository
+## Useful information about the project
 
-In the folder named CODE you are able to find DB, code of all the functions and the main code which make my bot work.
+There is a guide how to write your own telegram-bot with examples in **[GUIDE.md file](https://github.com/ArtSN7/EPQ_PR/blob/main/GUIDE.md)**
 
-In the folder named ESSAY you are able to find my story about how the tg-bot had been done step by step.
+In the **[CODE folder](https://github.com/ArtSN7/EPQ_PR/tree/main/CODE)** you can find main.py ( which runs the bot ) and folders:
+    • functions - there are all the functions of the bot
+    • db - place where the database is stored
+    • data - there are files which help running the bot
 
-
-## Resources
+## Resources 
 
 --
 
