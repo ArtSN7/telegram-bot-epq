@@ -447,6 +447,8 @@ async def stop(update, context):
 #------------------------------------------------------------------
 # functions that controls all the activity in the bot
 def main():
+
+
     # create an Application object with specific telegram key which I recieved from BotFather
     application = Application.builder().token(config.tg_key).build()
     #------------------------------------------------------------------

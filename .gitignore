@@ -1,0 +1,7 @@
+# ignore ALL .DS_Store files
+*.DS_Store
+
+# ignore ALL files in ANY directory named __pycache__
+__pycache__
+
+CODE/data/keys.py
