@@ -8,6 +8,7 @@
 There is a guide how to write your own telegram-bot with examples in **[GUIDE.md file](https://github.com/ArtSN7/EPQ_PR/blob/main/GUIDE.md)**
 
 In the **[CODE folder](https://github.com/ArtSN7/EPQ_PR/tree/main/CODE)** you can find main.py ( which runs the bot ) and folders:
+
     • functions - there are all the functions of the bot
     • db - place where the database is stored
     • data - there are files which help running the bot
