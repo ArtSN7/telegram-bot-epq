@@ -12,7 +12,7 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 
 from data import config
 
-from functions import gpt, quote, weather, news, recipes, events
+from functions import gpt, quote, weather, news, recipes, events, flight
 
 #------------------------------------------------------------------
 # weather buttond
@@ -88,6 +88,29 @@ async def start_command(update, context):
     # sending message as an asnwer to the start button
     await update.message.reply_html(f"Hello, {user.mention_html()}!\n\nI am AUXXIbot, but friends call me AUX, so you can call me like this ;D\n\nI am your personal assistant that can simplify your life, moreover, you can ask me whatever you want and recieve an answer!\n\nTo see more of my power try /help button :)")
 
+
+
+#------------------------------------------------------------------
+# flight function
+
+async def flight_command_0(update, context):
+    await update.message.reply_text("Please, send us airport code from your ticket. Just to remind, EK104 ( on the photo ) is a airport code (EK) and flight number(104)")
+    await update.message.reply_text("https://www.flightright.co.uk/wp-content/uploads/sites/2/2023/02/where-can-i-find-my-flight-number.jpg")
+    return 1
+
+async def flight_command_1(update, context):
+    context.user_data['airport'] = update.message.text.upper() # upper is needed if user inputed in a wrong format
+    await update.message.reply_text("Thank you, now send us you flight code, which is also on your ticket.")
+    return 2
+
+async def flight_command_2(update, context):
+    context.user_data['flight'] = update.message.text
+
+    answer = await flight.get_flight_info(context.user_data["flight"], context.user_data["airport"])
+    await update.message.reply_text(answer)
+
+    context.user_data.clear()
+    return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
 #------------------------------------------------------------------
@@ -461,6 +484,18 @@ def main():
     application.add_handler(CommandHandler("quote", quote_command)) # adding /quote command
     #------------------------------------------------------------------
 
+    #------------------------------------------------------------------
+    # FLIGHT COMMAND
+    conv_handler_flight = ConversationHandler( # /gpt command
+        entry_points=[CommandHandler("flight", flight_command_0)], # declaring the function which will start the conversation if gpt command is called
+        states={
+            1: [MessageHandler(filters.TEXT, flight_command_1)], # after next message this function will be called ( user must send text message )
+            2: [MessageHandler(filters.TEXT, flight_command_2)], # after next message this function will be called ( user must send text message )
+        },
+        fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
+    )
+    application.add_handler(conv_handler_flight) # adding /flight command
+    #------------------------------------------------------------------
 
 
     #------------------------------------------------------------------
