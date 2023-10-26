@@ -16,7 +16,7 @@ In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** 
 
 ## Resources 
 
---
+
 
 **[• Library documentation](https://docs.python-telegram-bot.org/en/v20.6/)**
 
@@ -100,6 +100,9 @@ In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** 
 
 --
 
+**[• Flight](https://docs.flightapi.io/flight-tracking-api#response)**
+
+
 
 ## FUNCTIONS:
 
@@ -117,3 +120,5 @@ In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** 
 • recipes - help you to choose right dish for your event
 
 • events - finds events near your current location
+
+• flight - provides information about your flight
