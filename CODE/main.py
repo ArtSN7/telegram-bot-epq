@@ -56,9 +56,6 @@ markup_events_date = ReplyKeyboardMarkup(reply_keyboard_events_date, one_time_ke
 
 
 
-
-
-
 #------------------------------------------------------------------
 # help function wich explains abilities of all functions in the bot
 async def help_command(update, context):
@@ -172,8 +169,8 @@ async def gpt_command(update, context):
 
 async def message_answer(update, context):
     txt = update.message.text # gettin text which was sent by user
-    answer = gpt.question_gpt(txt) # asking gpt function to give an answer - if something is wrong, it will return error
     await update.message.reply_text("Wait for a little bit... We are looking for the best answer!")
+    answer = gpt.question_gpt(txt) # asking gpt function to give an answer - if something is wrong, it will return error
     await update.message.reply_text(f"{answer}") # sending an answer to user
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
@@ -464,6 +461,7 @@ async def ingredient_response(update, context):
 #------------------------------------------------------------------
 # function that stops dialogue with user
 async def stop(update, context):
+    update.message.reply_text("Function was stopped.")
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 

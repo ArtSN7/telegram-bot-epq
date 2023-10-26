@@ -52,7 +52,8 @@ async def get_flight_info(num, name):
         return response_dep + response_ar # returning response to the user
     
     except Exception as e: # if there are any mistakes
-        return "Sorry, your flight was not found. Please, check accuracy of data."
+        print(e)
+        return "Sorry, your flight was not found or it's already flew away. Please, check accuracy of data."
 
 
 if os.name == 'nt': # code which forces asyncio work properly on the windows machines
