@@ -54,7 +54,17 @@ reply_keyboard_events_date = [['/Today'], ['/Tomorrow'], ['/This_week'], ['/Next
 markup_events_date = ReplyKeyboardMarkup(reply_keyboard_events_date, one_time_keyboard=True, resize_keyboard=True)
 #------------------------------------------------------------------
 
+#------------------------------------------------------------------
+# profile change buttons 
+reply_keyboard_profile_change = [['/change_language']]
+markup_profile_change = ReplyKeyboardMarkup(reply_keyboard_profile_change, one_time_keyboard=True, resize_keyboard=True)
 
+# ar de en es fr he it nl no pt ru sv ud zh - languages
+reply_keyboard_profile_language = [['/en'],['/fr'], ['/de'], ['/es'],['/it'],['/ru']]
+markup_profile_language = ReplyKeyboardMarkup(reply_keyboard_profile_language, one_time_keyboard=True, resize_keyboard=True)
+
+
+#------------------------------------------------------------------
 
 #------------------------------------------------------------------
 # help function wich explains abilities of all functions in the bot
@@ -456,6 +466,107 @@ async def ingredient_response(update, context):
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
+#------------------------------------------------------------------
+# Changing language function
+
+async def user_profile(update, context):
+    await update.message.reply_html(rf"Please, choose what you want to change", reply_markup=markup_profile_change)
+
+
+async def change_user_lang(update, context):
+    user = update.effective_user # getting user info from telegram
+
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+
+    lang = person.language # getting user's language
+
+    await update.message.reply_html(rf"Please, choose language to which you want to switch. Your current language is '{lang}'", reply_markup=markup_profile_language)
+
+
+async def en(update, context):
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    person.language  = 'en' # changing user's language
+
+    db_sess.commit()
+
+    await update.message.reply_text("Your language has been succefully updated!")
+
+async def it(update, context):
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    person.language  = 'it' # changing user's language
+
+    db_sess.commit()
+
+
+    await update.message.reply_text("Your language has been succefully updated!")
+
+async def de(update, context):
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    person.language  = 'de' # changing user's language
+
+    db_sess.commit()
+
+
+
+    await update.message.reply_text("Your language has been succefully updated!")
+
+async def fr(update, context):
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    person.language  = 'fr' # changing user's language
+
+    db_sess.commit()
+
+
+    await update.message.reply_text("Your language has been succefully updated!")
+
+async def es(update, context):
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    person.language  = 'es' # changing user's language
+
+    db_sess.commit()
+
+
+    await update.message.reply_text("Your language has been succefully updated!")
+
+async def ru(update, context):
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    person.language  = 'ru' # changing user's language
+
+    db_sess.commit()
+
+
+    await update.message.reply_text("Your language has been succefully updated!")
+
+
+
+#------------------------------------------------------------------
 
 
 #------------------------------------------------------------------
@@ -616,6 +727,22 @@ def main():
     application.add_handler(CommandHandler("This_week", this_week_event))
     application.add_handler(CommandHandler("Next_week", next_week_event))
     application.add_handler(CommandHandler("All_dates", all_event))
+    #------------------------------------------------------------------
+
+    #------------------------------------------------------------------
+    # USER'S PROFILE COMMAND
+
+    application.add_handler(CommandHandler("profile", user_profile))
+    application.add_handler(CommandHandler("change_language", change_user_lang))
+
+
+    # languages 
+    application.add_handler(CommandHandler("en", en))
+    application.add_handler(CommandHandler("de", de))
+    application.add_handler(CommandHandler("fr", fr))
+    application.add_handler(CommandHandler("it", it))
+    application.add_handler(CommandHandler("es", es))
+    application.add_handler(CommandHandler("ru", ru))
     #------------------------------------------------------------------
 
 

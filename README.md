@@ -122,3 +122,5 @@ In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** 
 • events - finds events near your current location
 
 • flight - provides information about your flight
+
+• profile - povides ability to change different profile settings
