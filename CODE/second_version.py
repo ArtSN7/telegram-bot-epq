@@ -61,17 +61,15 @@ markup_events_date = ReplyKeyboardMarkup(reply_keyboard_events_date, one_time_ke
 reply_keyboard_profile_change = [['/change_language']]
 markup_profile_change = ReplyKeyboardMarkup(reply_keyboard_profile_change, one_time_keyboard=True, resize_keyboard=True)
 
-# ar de en es fr he it nl no pt ru sv ud zh - languages
-reply_keyboard_profile_language = [['/en'],['/fr'], ['/de'], ['/es'],['/it'],['/ru']]
-markup_profile_language = ReplyKeyboardMarkup(reply_keyboard_profile_language, one_time_keyboard=True, resize_keyboard=True)
 
 
 #------------------------------------------------------------------
 
 
+
 #------------------------------------------------------------------
-# function which work with all inline keyboard buttons
-async def inline_buttons(update, context):
+# help function wich explains abilities of all functions in the bot
+async def button(update, context):
     query = update.callback_query
 
     # CallbackQueries need to be answered, even if no notification to the user is needed
@@ -111,7 +109,6 @@ async def inline_buttons(update, context):
     await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}")
 #------------------------------------------------------------------
 
-
 #------------------------------------------------------------------
 # help function wich explains abilities of all functions in the bot
 async def help_command(update, context):
@@ -148,9 +145,7 @@ async def start_command(update, context):
 
 async def flight_command_0(update, context):
     await update.message.reply_text("Please, send us airport code from your ticket. Just to remind, EK104 ( on the photo ) is a airport code (EK) and flight number(104)")
-
-    url = "https://www.flightright.co.uk/wp-content/uploads/sites/2/2023/02/where-can-i-find-my-flight-number.jpg"
-    await context.bot.send_photo(update.message.chat_id, url, caption="") # seding example of ticket
+    await update.message.reply_text("https://www.flightright.co.uk/wp-content/uploads/sites/2/2023/02/where-can-i-find-my-flight-number.jpg")
     return 1
 
 async def flight_command_1(update, context):
@@ -242,7 +237,7 @@ async def quote_command(update, context):
     await update.message.reply_text(f'{answer[0]}') # sending random quote to user
 
     if answer[1] != "": # if there is a link with author's photo, then we send it
-        await context.bot.send_photo(update.message.chat_id, answer[1], caption="") # sending link to the photo ( tg will represent it )
+        await context.bot.send_message(update.message.chat_id, text=answer[1]) # sending link to the photo ( tg will represent it )
 
 
 
@@ -418,97 +413,73 @@ async def italian_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Italian")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def british_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("British")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def chinese_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Chinese")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def european_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("European")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def french_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("French")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def german_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("German")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def greek_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Greek")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def indian_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Idian")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def japanese_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Japanese")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def korean_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Korean")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def mexican_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Mexican")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 async def thai_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Thai")
     answer, url = await func
     await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+    await update.message.reply_text(f"{url}")
 
 # dish name 
 async def dish_name(update, context):
@@ -520,9 +491,7 @@ async def dish_name_response(update, context):
     answer, url = await recipes.get_rec_by_name(txt) # sending a request
 
     await update.message.reply_text(f"{answer}") # sending an answer to user
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    ) # sending picture
+    await update.message.reply_text(f"{url}") # sending picture
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 # ingredients 
@@ -536,20 +505,18 @@ async def ingredient_response(update, context):
     answer, url = await recipes.get_rec_by_ingredients(txt) # sending a request
 
     await update.message.reply_text(f"{answer}") # sending an answer to user
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    ) # sending picture
+    await update.message.reply_text(f"{url}") # sending picture
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
 #------------------------------------------------------------------
-# Profile connected function 
+# Changing language function
 
 async def user_profile(update, context):
     await update.message.reply_html(rf"Please, choose what you want to change", reply_markup=markup_profile_change)
 
 
- # changing user's language
+    
 async def change_user_lang(update, context):
     user = update.effective_user # getting user info from telegram
 
@@ -575,7 +542,6 @@ async def change_user_lang(update, context):
     await update.message.reply_html(rf"Please, choose language to which you want to switch. Your current language is '{lang}'", reply_markup=markup_profile_language)
 
 
-# language functions
 async def en(id):
     db_sess = db_session.create_session() # creating connection with database
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -621,6 +587,7 @@ async def es(id):
     db_sess.commit()
 
     
+
 async def ru(id):
     db_sess = db_session.create_session() # creating connection with database
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -628,6 +595,8 @@ async def ru(id):
     person.language  = 'ru' # changing user's language
 
     db_sess.commit()
+
+
 
 #------------------------------------------------------------------
 
@@ -651,7 +620,7 @@ def main():
     #------------------------------------------------------------------
     # registrating command handler in order to check what buttons were pressed
 
-    application.add_handler(CallbackQueryHandler(inline_buttons)) # handler which will work with all inline functions 
+    application.add_handler(CallbackQueryHandler(button))
 
     application.add_handler(CommandHandler("start", start_command)) # adding /start command
     application.add_handler(CommandHandler("help", help_command)) # adding /help command
