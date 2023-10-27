@@ -11,6 +11,7 @@ from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackQueryHandler, ContextTypes
+from telegram import ReplyKeyboardRemove
 
 from data import config
 
@@ -108,14 +109,14 @@ async def inline_buttons(update, context):
         id = user.id #getting user id
         await it(id)
 
-    await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}")
+    await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
 #------------------------------------------------------------------
 
 
 #------------------------------------------------------------------
 # help function wich explains abilities of all functions in the bot
 async def help_command(update, context):
-    await update.message.reply_text('1')
+    await update.message.reply_text('1', reply_markup=ReplyKeyboardRemove())
 
 
 #------------------------------------------------------------------
@@ -147,7 +148,7 @@ async def start_command(update, context):
 # flight function
 
 async def flight_command_0(update, context):
-    await update.message.reply_text("Please, send us airport code from your ticket. Just to remind, EK104 ( on the photo ) is a airport code (EK) and flight number(104)")
+    await update.message.reply_text("Please, send us airport code from your ticket. Just to remind, EK104 ( on the photo ) is a airport code (EK) and flight number(104)", reply_markup=ReplyKeyboardRemove())
 
     url = "https://www.flightright.co.uk/wp-content/uploads/sites/2/2023/02/where-can-i-find-my-flight-number.jpg"
     await context.bot.send_photo(update.message.chat_id, url, caption="") # seding example of ticket
@@ -155,14 +156,14 @@ async def flight_command_0(update, context):
 
 async def flight_command_1(update, context):
     context.user_data['airport'] = update.message.text.upper() # upper is needed if user inputed in a wrong format
-    await update.message.reply_text("Thank you, now send us you flight code, which is also on your ticket.")
+    await update.message.reply_text("Thank you, now send us you flight code, which is also on your ticket.", reply_markup=ReplyKeyboardRemove())
     return 2
 
 async def flight_command_2(update, context):
     context.user_data['flight'] = update.message.text
 
     answer = await flight.get_flight_info(context.user_data["flight"], context.user_data["airport"])
-    await update.message.reply_text(answer)
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove())
 
     context.user_data.clear()
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
@@ -182,54 +183,51 @@ async def events_response(update, context):
 
     context.user_data['long'] = long
     context.user_data['lat'] = lat
-    await update.message.reply_html(rf"Please, choose the type of event!",
-                                    reply_markup=markup_events_type)
+    await update.message.reply_html(rf"Please, choose the type of event!", reply_markup=markup_events_type)
 
     return ConversationHandler.END
 
 async def real_event_type(update, context): # if event type is real
     context.user_data['type'] = "Real"
-    await update.message.reply_html(rf"Please, now choose the date of event!",
-                                    reply_markup=markup_events_date)
+    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date)
     
 async def virtual_event_type(update, context): # if event type is virtual
     context.user_data['type'] = "Virtual"
-    await update.message.reply_html(rf"Please, now choose the date of event!",
-                                    reply_markup=markup_events_date)
+    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date)
 
 
 async def today_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "today")
-    await update.message.reply_text(f"{answer}") 
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
 
 async def tomorrow_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "tomorrow")
-    await update.message.reply_text(f"{answer}") 
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
 
 async def this_week_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "week")
-    await update.message.reply_text(f"{answer}") 
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
 
 async def next_week_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "next_week")
-    await update.message.reply_text(f"{answer}") 
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
 
 async def all_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "all")
-    await update.message.reply_text(f"{answer}")  
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())  
 
 
 #------------------------------------------------------------------
 # chat-gpt function
 async def gpt_command(update, context):
-    await update.message.reply_text('Please, send a message with your question.') # asking to send a messagew with question 
+    await update.message.reply_text('Please, send a message with your question.', reply_markup=ReplyKeyboardRemove()) # asking to send a messagew with question 
     return 1 # showing that the next function must be message_answer(update, context)
 
 async def message_answer(update, context):
     txt = update.message.text # gettin text which was sent by user
     await update.message.reply_text("Wait for a little bit... We are looking for the best answer!")
     answer = gpt.question_gpt(txt) # asking gpt function to give an answer - if something is wrong, it will return error
-    await update.message.reply_text(f"{answer}") # sending an answer to user
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
@@ -239,7 +237,7 @@ async def message_answer(update, context):
 async def quote_command(update, context):
     func = quote.quote() # declaring function call ( procedure that is needed to work with async requests )
     answer = await func # getting response from function
-    await update.message.reply_text(f'{answer[0]}') # sending random quote to user
+    await update.message.reply_text(f'{answer[0]}', reply_markup=ReplyKeyboardRemove()) # sending random quote to user
 
     if answer[1] != "": # if there is a link with author's photo, then we send it
         await context.bot.send_photo(update.message.chat_id, answer[1], caption="") # sending link to the photo ( tg will represent it )
@@ -254,7 +252,7 @@ async def weather_command(update, context):
                                     reply_markup=markup_weather_options)
 
 async def weather_command_coords(update, context):
-    await update.message.reply_html(rf"To analyse data, you need to send your current location.",
+    await update.message.reply_html(rf"To analyse data, you need to send your current location (use button below)",
                                     reply_markup=markup_weather_loc)
     return 1
 
@@ -266,13 +264,13 @@ async def weather_command_response_coords(update, context): # function which wor
     long, lang = update.message.location.longitude, update.message.location.latitude # getting user coordinates 
     func = weather.weather_coords((long, lang)) # calling function
     answer = await func # getting response 
-    await update.message.reply_text(f"{answer}") # sending response to the user
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to the user
     return ConversationHandler.END # ending conversation
 
 async def weather_command_response_address(update, context): # function which works with address
     func = weather.weather_address(update.message.text) # calling function
     answer = await func # getting answer
-    await update.message.reply_text(f"{answer}") # sending response to the user
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to the user
     return ConversationHandler.END # ending conversation 
 
 #------------------------------------------------------------------
@@ -297,7 +295,7 @@ async def business(update, context):
 
     func = news.get_news('business', language)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
 
 
 async def entertainment(update, context):
@@ -312,7 +310,7 @@ async def entertainment(update, context):
 
     func = news.get_news('entertainment', language)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
 
 
 async def general(update, context):
@@ -327,7 +325,7 @@ async def general(update, context):
 
     func = news.get_news('general', language)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
 
 
 async def health(update, context):
@@ -342,7 +340,7 @@ async def health(update, context):
 
     func = news.get_news('health', language)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
 
 
 async def science(update, context):
@@ -357,7 +355,7 @@ async def science(update, context):
 
     func = news.get_news('science', language)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
 
 
 async def sports(update, context):
@@ -372,7 +370,7 @@ async def sports(update, context):
 
     func = news.get_news('sports', language)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
 
 
 async def technology(update, context):
@@ -387,7 +385,7 @@ async def technology(update, context):
 
     func = news.get_news('technology', language)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
 
 
 async def specific_news(update, context):
@@ -399,7 +397,7 @@ async def specific_news_response(update, context):
 
     func = news.get_spec_news(update.message.text)
     answer = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
 
 
@@ -417,7 +415,7 @@ async def cuisine_command(update, context):
 async def italian_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Italian")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -425,7 +423,7 @@ async def italian_cuisine(update, context):
 async def british_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("British")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -433,13 +431,13 @@ async def british_cuisine(update, context):
 async def chinese_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Chinese")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
 
 async def european_cuisine(update, context):
-    func = recipes.get_rec_by_cuisine("European")
+    func = recipes.get_rec_by_cuisine("European", reply_markup=ReplyKeyboardRemove())
     answer, url = await func
     await update.message.reply_text(f"{answer}")
     await context.bot.send_photo(
@@ -449,7 +447,7 @@ async def european_cuisine(update, context):
 async def french_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("French")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -457,7 +455,7 @@ async def french_cuisine(update, context):
 async def german_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("German")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -465,7 +463,7 @@ async def german_cuisine(update, context):
 async def greek_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Greek")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -473,7 +471,7 @@ async def greek_cuisine(update, context):
 async def indian_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Idian")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -481,7 +479,7 @@ async def indian_cuisine(update, context):
 async def japanese_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Japanese")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -489,7 +487,7 @@ async def japanese_cuisine(update, context):
 async def korean_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Korean")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -497,7 +495,7 @@ async def korean_cuisine(update, context):
 async def mexican_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Mexican")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
@@ -505,21 +503,21 @@ async def mexican_cuisine(update, context):
 async def thai_cuisine(update, context):
     func = recipes.get_rec_by_cuisine("Thai")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     )
 
 # dish name 
 async def dish_name(update, context):
-    await update.message.reply_text(f"Please, send me a name of the dish you want to cook, for example, pasta.")
+    await update.message.reply_text(f"Please, send me a name of the dish you want to cook, for example, pasta.", reply_markup=ReplyKeyboardRemove())
     return 1 # showing bot that next message must be read by dish_name_response function
 
 async def dish_name_response(update, context):
     txt = update.message.text # gettin text which was sent by user
     answer, url = await recipes.get_rec_by_name(txt) # sending a request
 
-    await update.message.reply_text(f"{answer}") # sending an answer to user
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     ) # sending picture
@@ -528,14 +526,14 @@ async def dish_name_response(update, context):
 # ingredients 
 # dish name 
 async def ingredients(update, context):
-    await update.message.reply_text(f"Please, send me name of ingredients in format name1,name2,name3... , where name1 is a name of ingredient.")
+    await update.message.reply_text(f"Please, send me name of ingredients in format name1,name2,name3... , where name1 is a name of ingredient.", reply_markup=ReplyKeyboardRemove())
     return 1 # showing bot that next message must be read by dish_name_response function
 
 async def ingredient_response(update, context):
     txt = update.message.text # gettin text which was sent by user
     answer, url = await recipes.get_rec_by_ingredients(txt) # sending a request
 
-    await update.message.reply_text(f"{answer}") # sending an answer to user
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
     await context.bot.send_photo(
         update.message.chat_id, url, caption=""
     ) # sending picture
@@ -635,7 +633,7 @@ async def ru(id):
 #------------------------------------------------------------------
 # function that stops dialogue with user
 async def stop(update, context):
-    update.message.reply_text("Function was stopped.")
+    update.message.reply_text("Function was stopped.", reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
