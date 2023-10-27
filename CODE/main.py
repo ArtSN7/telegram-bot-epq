@@ -83,33 +83,39 @@ async def inline_buttons(update, context):
         user = update.effective_user # getting user info from telegram
         id = user.id #getting user id
         await es(id)
+        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
     
     if query.data == 'en':
         user = update.effective_user # getting user info from telegram
         id = user.id #getting user id
         await en(id)
+        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
     
     if query.data == 'fr':
         user = update.effective_user # getting user info from telegram
         id = user.id #getting user id
         await fr(id)
+        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
 
     if query.data == 'de':
         user = update.effective_user # getting user info from telegram
         id = user.id #getting user id
         await de(id)
+        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
 
     if query.data == 'ru':
         user = update.effective_user # getting user info from telegram
         id = user.id #getting user id
         await ru(id)
+        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
 
     if query.data == 'it':
         user = update.effective_user # getting user info from telegram
         id = user.id #getting user id
         await it(id)
+        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
 
-    await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
+    
 #------------------------------------------------------------------
 
 
