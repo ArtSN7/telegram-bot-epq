@@ -61,7 +61,7 @@ markup_profile_change = ReplyKeyboardMarkup(reply_keyboard_profile_change, one_t
 
 #------------------------------------------------------------------
 # function which work with all inline keyboard buttons
-async def inline_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def inline_buttons(update, context):
     query = update.callback_query
 
     # CallbackQueries need to be answered, even if no notification to the user is needed
@@ -186,6 +186,7 @@ async def inline_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
         answer = await thai_cuisine()
         await query.edit_message_text(text=f"{answer}")
 
+
 #------------------------------------------------------------------
 
 
@@ -301,7 +302,7 @@ async def gpt_command(update, context):
 
 async def message_answer(update, context):
     txt = update.message.text # gettin text which was sent by user
-    await update.message.reply_text("Wait for a little bit... We are looking for the best answer!")
+    await update.message.reply_text("Please, wait. Your request might take 2-15 seconds.")
     answer = gpt.question_gpt(txt) # asking gpt function to give an answer - if something is wrong, it will return error
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
@@ -333,7 +334,7 @@ async def weather_command_coords(update, context):
     return 1
 
 async def weather_command_address(update, context):
-    await update.message.reply_html(rf"To analyse data, you need to send address")
+    await update.message.reply_html(rf"To analyse data, you need to send address", reply_markup=ReplyKeyboardRemove())
     return 1
 
 async def weather_command_response_coords(update, context): # function which works with longitude and latitude 
@@ -464,7 +465,7 @@ async def technology(id):
 
 
 async def specific_news(update, context):
-    await update.message.reply_text("Enter the topic you are interested in (for example, Microsoft)")
+    await update.message.reply_text("Enter the topic you are interested in (for example, Microsoft)", reply_markup=ReplyKeyboardRemove())
     return 1
 
 
@@ -486,18 +487,18 @@ async def recipes_command(update, context):
 async def cuisine_command(update, context):
 
     keyboard_cuisine_type = [
-        [InlineKeyboardButton("Italian", callback_data="italian")],
-        [InlineKeyboardButton("Thai", callback_data="thai")],
-        [InlineKeyboardButton("Mexican", callback_data="mexican")],
-        [InlineKeyboardButton("Korean", callback_data="korean")],
-        [InlineKeyboardButton("Japanese", callback_data="japanese")],
-        [InlineKeyboardButton("Indian", callback_data="indian")],
-        [InlineKeyboardButton("Greek", callback_data="greek")],
-        [InlineKeyboardButton("German", callback_data="german")],
-        [InlineKeyboardButton("French", callback_data="french")],
-        [InlineKeyboardButton("European", callback_data="european")],
-        [InlineKeyboardButton("Chinese", callback_data="chinese")],
-        [InlineKeyboardButton("British", callback_data="british")],
+        [InlineKeyboardButton("Italian🇮🇹", callback_data="italian")],
+        [InlineKeyboardButton("Thai🇹🇭", callback_data="thai")],
+        [InlineKeyboardButton("Mexican🇲🇽", callback_data="mexican")],
+        [InlineKeyboardButton("Korean🇰🇷", callback_data="korean")],
+        [InlineKeyboardButton("Japanese🇯🇵", callback_data="japanese")],
+        [InlineKeyboardButton("Indian🇮🇳", callback_data="indian")],
+        [InlineKeyboardButton("Greek🇬🇷", callback_data="greek")],
+        [InlineKeyboardButton("German🇩🇪", callback_data="german")],
+        [InlineKeyboardButton("French🇫🇷", callback_data="french")],
+        [InlineKeyboardButton("European🇪🇺", callback_data="european")],
+        [InlineKeyboardButton("Chinese🇨🇳", callback_data="chinese")],
+        [InlineKeyboardButton("British🇬🇧", callback_data="british")],
  
     ]
 
@@ -579,7 +580,7 @@ async def greek_cuisine():
 
 
 async def indian_cuisine():
-    func = recipes.get_rec_by_cuisine("Idian")
+    func = recipes.get_rec_by_cuisine("Indian")
     answer, url = await func
 
     if url != "...":
@@ -628,7 +629,7 @@ async def thai_cuisine():
 
 # dish name 
 async def dish_name(update, context):
-    await update.message.reply_text(f"Please, send me a name of the dish you want to cook, for example, pasta.", reply_markup=ReplyKeyboardRemove())
+    await update.message.reply_text(f"Please, send a name of the dish you want to cook, for example, pasta. ( in english )", reply_markup=ReplyKeyboardRemove())
     return 1 # showing bot that next message must be read by dish_name_response function
 
 async def dish_name_response(update, context):
@@ -661,12 +662,12 @@ async def change_user_lang(update, context):
     lang = person.language # getting user's language
 
     keyboard_language = [
-        [InlineKeyboardButton("en🏴󠁧󠁢󠁥󠁮󠁧󠁿", callback_data="en")],
-        [InlineKeyboardButton("fr🇫🇷", callback_data="fr")],
-        [InlineKeyboardButton("de🇩🇪", callback_data="de")],
-        [InlineKeyboardButton("es🇪🇸", callback_data="es")],
-        [InlineKeyboardButton("it🇮🇹", callback_data="it")],
-        [InlineKeyboardButton("ru🇷🇺", callback_data="ru")],
+        [InlineKeyboardButton("En🏴󠁧󠁢󠁥󠁮󠁧󠁿", callback_data="en")],
+        [InlineKeyboardButton("Fr🇫🇷", callback_data="fr")],
+        [InlineKeyboardButton("De🇩🇪", callback_data="de")],
+        [InlineKeyboardButton("Es🇪🇸", callback_data="es")],
+        [InlineKeyboardButton("It🇮🇹", callback_data="it")],
+        [InlineKeyboardButton("Ru🇷🇺", callback_data="ru")],
     ]
 
     markup_profile_language = InlineKeyboardMarkup(keyboard_language)
@@ -735,7 +736,7 @@ async def ru(id):
 #------------------------------------------------------------------
 # function that stops dialogue with user
 async def stop(update, context):
-    update.message.reply_text("Function was stopped.", reply_markup=ReplyKeyboardRemove())
+    await update.message.reply_text("Function was stopped.", reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
@@ -760,12 +761,12 @@ def main():
 
     #------------------------------------------------------------------
     # FLIGHT COMMAND
-    
+
     conv_handler_flight = ConversationHandler( # /gpt command
         entry_points=[CommandHandler("flight", flight_command_0)], # declaring the function which will start the conversation if gpt command is called
         states={
-            1: [MessageHandler(filters.TEXT, flight_command_1)], # after next message this function will be called ( user must send text message )
-            2: [MessageHandler(filters.TEXT, flight_command_2)], # after next message this function will be called ( user must send text message )
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, flight_command_1)], # after next message this function will be called ( user must send text message )
+            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, flight_command_2)], # after next message this function will be called ( user must send text message )
         },
         fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
     )
@@ -803,7 +804,7 @@ def main():
     conv_handler_gpt = ConversationHandler( # /gpt command
         entry_points=[CommandHandler("gpt", gpt_command)], # declaring the function which will start the conversation if gpt command is called
         states={
-            1: [MessageHandler(filters.TEXT, message_answer)], # after next message this function will be called ( user must send text message )
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, message_answer)], # after next message this function will be called ( user must send text message )
         },
         fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
     )
@@ -839,7 +840,7 @@ def main():
     conv_handler_dish_name = ConversationHandler( # /dish_name command
         entry_points=[CommandHandler("by_name", dish_name)], # declaring the function which will start the conversation if dish_name had been called
         states={
-            1: [MessageHandler(filters.TEXT, dish_name_response)], # after next message this function will be called ( user must send text message )
+            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, dish_name_response)], # after next message this function will be called ( user must send text message )
         },
         fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
     )
