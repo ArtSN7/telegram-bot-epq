@@ -71,7 +71,7 @@ async def get_rec_by_cuisine(cuisine): # function which calls other function to 
         return response, img # returning response and url of image 
     
     except Exception as e:
-        return "Sorry, there is an error on the server. Try again later :(", "..."
+        return "Sorry, nothing was found", "..."
 
 
 async def get_name(name):
@@ -99,7 +99,7 @@ async def get_rec_by_name(cuisine): # function which calls other function to cre
 
         return response, img # returning response and url of image 
     except Exception as e:
-        return "Sorry, there is an error on the server. Try again later :(", "..."
+        return "Sorry, nothing was found", "..."
 
 
 async def get_by_ingredient(ingredients):
@@ -128,7 +128,7 @@ async def get_by_ingredient(ingredients):
         return id, title, img # returning id of the dish, title of the dish and url of the image of the dish
     
     except Exception as e: # if there are any mistakes, or nothing will be found
-        return "Sorry, there is an error on the server. Try again later :(", "..."
+        return "Sorry, nothing was found", "..."
 
 
 async def get_rec_by_ingredients(ing): # function which calls other function to create a full response
@@ -141,4 +141,4 @@ async def get_rec_by_ingredients(ing): # function which calls other function to 
 
         return response, img # returning response and url of image 
     except Exception as e:
-        return "Sorry, there is an error on the server. Try again later :(", "..."
+        return "Sorry, nothing was found", "..."

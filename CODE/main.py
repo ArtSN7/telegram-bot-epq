@@ -28,7 +28,7 @@ markup_weather_options = ReplyKeyboardMarkup([[address_button],[coords_button]],
 
 #------------------------------------------------------------------
 # news buttons 
-reply_keyboard_news = [['/specific_news'], ['/general_news']]
+reply_keyboard_news = [['/general_news'], ['/specific_news']]
 markup_news = ReplyKeyboardMarkup(reply_keyboard_news, one_time_keyboard=True, resize_keyboard=True)
 
 
@@ -36,13 +36,8 @@ markup_news = ReplyKeyboardMarkup(reply_keyboard_news, one_time_keyboard=True, r
 # recipes buttons 
 
 # types of request
-reply_keyboard_recipe_type = [['/cuisines'], ['/ingredients'], ['/dish_name']]
+reply_keyboard_recipe_type = [['/by_cuisine'], ['/by_name']]
 markup_recipe_type = ReplyKeyboardMarkup(reply_keyboard_recipe_type, one_time_keyboard=True, resize_keyboard=True)
-
-# cuisines 
-reply_keyboard_cuisine_type = [['/Italian'], ['/British'], ['/Chinese'], ['/European'], ['/French'], ['/German'],['/Greek'], ['/Indian'],['/Japanese'], ['/Korean'],
-                               ['/Mexican'], ['/Thai']]
-markup_cuisine_type = ReplyKeyboardMarkup(reply_keyboard_cuisine_type, one_time_keyboard=True, resize_keyboard=True)
 
 #------------------------------------------------------------------
 # evetns buttond
@@ -60,10 +55,6 @@ markup_events_date = ReplyKeyboardMarkup(reply_keyboard_events_date, one_time_ke
 reply_keyboard_profile_change = [['/change_language']]
 markup_profile_change = ReplyKeyboardMarkup(reply_keyboard_profile_change, one_time_keyboard=True, resize_keyboard=True)
 
-# ar de en es fr he it nl no pt ru sv ud zh - languages
-reply_keyboard_profile_language = [['/en'],['/fr'], ['/de'], ['/es'],['/it'],['/ru']]
-markup_profile_language = ReplyKeyboardMarkup(reply_keyboard_profile_language, one_time_keyboard=True, resize_keyboard=True)
-
 
 #------------------------------------------------------------------
 
@@ -80,7 +71,7 @@ async def inline_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user # getting user info from telegram
     id = user.id #getting user id
 
-    # food
+    # languages
 
     if query.data == 'es':
 
@@ -144,9 +135,57 @@ async def inline_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "technology":
         answer = await technology(id)
         await query.edit_message_text(text=f"{answer}")
-        
 
-    
+    # cuisine types
+        
+    if query.data == 'italian':
+        answer = await italian_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'british':
+        answer = await british_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'chinese':
+        answer = await chinese_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'european':
+        answer = await european_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'french':
+        answer = await french_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'german':
+        answer = await german_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'greek':
+        answer = await greek_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'indian':
+        answer = await indian_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'japanese':
+        answer = await japanese_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'korean':
+        answer = await korean_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'mexican':
+        answer = await mexican_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == 'thai':
+        answer = await thai_cuisine()
+        await query.edit_message_text(text=f"{answer}")
+
 #------------------------------------------------------------------
 
 
@@ -440,110 +479,152 @@ async def specific_news_response(update, context):
 #------------------------------------------------------------------
 # recipes function
 async def recipes_command(update, context):
-    await update.message.reply_html(rf"Please, choose by which parameter you want to choose recipe", reply_markup=markup_recipe_type) # chose between different types of request
+    await update.message.reply_text(rf"Please, choose by which parameter you want to choose recipe", reply_markup=markup_recipe_type) # chose between different types of request
 
 
 
 async def cuisine_command(update, context):
-    await update.message.reply_html(rf"Please, choose the type of cuisine you are interested in.", reply_markup=markup_cuisine_type) # chose between different cuisines
+
+    keyboard_cuisine_type = [
+        [InlineKeyboardButton("Italian", callback_data="italian")],
+        [InlineKeyboardButton("Thai", callback_data="thai")],
+        [InlineKeyboardButton("Mexican", callback_data="mexican")],
+        [InlineKeyboardButton("Korean", callback_data="korean")],
+        [InlineKeyboardButton("Japanese", callback_data="japanese")],
+        [InlineKeyboardButton("Indian", callback_data="indian")],
+        [InlineKeyboardButton("Greek", callback_data="greek")],
+        [InlineKeyboardButton("German", callback_data="german")],
+        [InlineKeyboardButton("French", callback_data="french")],
+        [InlineKeyboardButton("European", callback_data="european")],
+        [InlineKeyboardButton("Chinese", callback_data="chinese")],
+        [InlineKeyboardButton("British", callback_data="british")],
+ 
+    ]
+
+    markup_cuisine_type = InlineKeyboardMarkup(keyboard_cuisine_type)
+
+
+    await update.message.reply_text(rf"Please, choose the type of cuisine you are interested in.", reply_markup=markup_cuisine_type) # chose between different cuisines
 
 
 # adding different cuisines
-async def italian_cuisine(update, context):
+async def italian_cuisine():
     func = recipes.get_rec_by_cuisine("Italian")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def british_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def british_cuisine():
     func = recipes.get_rec_by_cuisine("British")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def chinese_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def chinese_cuisine():
     func = recipes.get_rec_by_cuisine("Chinese")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def european_cuisine(update, context):
-    func = recipes.get_rec_by_cuisine("European", reply_markup=ReplyKeyboardRemove())
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def european_cuisine():
+    func = recipes.get_rec_by_cuisine("European")
     answer, url = await func
-    await update.message.reply_text(f"{answer}")
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def french_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def french_cuisine():
     func = recipes.get_rec_by_cuisine("French")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def german_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def german_cuisine():
     func = recipes.get_rec_by_cuisine("German")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def greek_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def greek_cuisine():
     func = recipes.get_rec_by_cuisine("Greek")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def indian_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def indian_cuisine():
     func = recipes.get_rec_by_cuisine("Idian")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def japanese_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def japanese_cuisine():
     func = recipes.get_rec_by_cuisine("Japanese")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def korean_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+
+async def korean_cuisine():
     func = recipes.get_rec_by_cuisine("Korean")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def mexican_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+async def mexican_cuisine():
     func = recipes.get_rec_by_cuisine("Mexican")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
 
-async def thai_cuisine(update, context):
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
+async def thai_cuisine():
     func = recipes.get_rec_by_cuisine("Thai")
     answer, url = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    )
+
+    if url != "...":
+        return f"{answer}\n\n{url}"
+    else:
+        return f"{answer}"
+
 
 # dish name 
 async def dish_name(update, context):
@@ -555,26 +636,10 @@ async def dish_name_response(update, context):
     answer, url = await recipes.get_rec_by_name(txt) # sending a request
 
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    ) # sending picture
+    if url != '...':
+        await context.bot.send_photo(update.message.chat_id, url, caption="") # sending picture
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
-
-# ingredients 
-# dish name 
-async def ingredients(update, context):
-    await update.message.reply_text(f"Please, send me name of ingredients in format name1,name2,name3... , where name1 is a name of ingredient.", reply_markup=ReplyKeyboardRemove())
-    return 1 # showing bot that next message must be read by dish_name_response function
-
-async def ingredient_response(update, context):
-    txt = update.message.text # gettin text which was sent by user
-    answer, url = await recipes.get_rec_by_ingredients(txt) # sending a request
-
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
-    await context.bot.send_photo(
-        update.message.chat_id, url, caption=""
-    ) # sending picture
-    return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
+#------------------------------------------------------------------
 
 
 #------------------------------------------------------------------
@@ -695,6 +760,7 @@ def main():
 
     #------------------------------------------------------------------
     # FLIGHT COMMAND
+    
     conv_handler_flight = ConversationHandler( # /gpt command
         entry_points=[CommandHandler("flight", flight_command_0)], # declaring the function which will start the conversation if gpt command is called
         states={
@@ -709,6 +775,7 @@ def main():
 
     #------------------------------------------------------------------
     # WEATHER COMMAND
+
     application.add_handler(CommandHandler("weather", weather_command)) # adding /weather command which will start all weather process
 
     conv_handler_weather = ConversationHandler( # /weather command with coordinates
@@ -732,6 +799,7 @@ def main():
 
     #------------------------------------------------------------------
     # GPT COMMAND
+
     conv_handler_gpt = ConversationHandler( # /gpt command
         entry_points=[CommandHandler("gpt", gpt_command)], # declaring the function which will start the conversation if gpt command is called
         states={
@@ -744,6 +812,7 @@ def main():
 
     #------------------------------------------------------------------
     # NEWS COMMAND
+
     application.add_handler(CommandHandler("news", news_command))
     application.add_handler(CommandHandler("general_news", general_news))
 
@@ -763,23 +832,12 @@ def main():
     application.add_handler(CommandHandler("recipes", recipes_command))
 
     # cuisines 
-    application.add_handler(CommandHandler("cuisines", cuisine_command))
-    application.add_handler(CommandHandler("Italian", italian_cuisine))
-    application.add_handler(CommandHandler("British", british_cuisine))
-    application.add_handler(CommandHandler("Chinese", chinese_cuisine))
-    application.add_handler(CommandHandler("European", european_cuisine))
-    application.add_handler(CommandHandler("French", french_cuisine))
-    application.add_handler(CommandHandler("German", german_cuisine))
-    application.add_handler(CommandHandler("Greek", greek_cuisine))
-    application.add_handler(CommandHandler("Indian", indian_cuisine))
-    application.add_handler(CommandHandler("Japanese", japanese_cuisine))
-    application.add_handler(CommandHandler("Korean", korean_cuisine))
-    application.add_handler(CommandHandler("Mexican", mexican_cuisine))
-    application.add_handler(CommandHandler("Thai", thai_cuisine))
+    application.add_handler(CommandHandler("by_cuisine", cuisine_command))
+
 
     # dish_name
     conv_handler_dish_name = ConversationHandler( # /dish_name command
-        entry_points=[CommandHandler("dish_name", dish_name)], # declaring the function which will start the conversation if dish_name had been called
+        entry_points=[CommandHandler("by_name", dish_name)], # declaring the function which will start the conversation if dish_name had been called
         states={
             1: [MessageHandler(filters.TEXT, dish_name_response)], # after next message this function will be called ( user must send text message )
         },
@@ -787,15 +845,6 @@ def main():
     )
     application.add_handler(conv_handler_dish_name) # adding /dish_name command
 
-    # ingredients
-    conv_handler_ingredients = ConversationHandler( # /dish_name command
-        entry_points=[CommandHandler("ingredients", ingredients)], # declaring the function which will start the conversation if ingredients had been called
-        states={
-            1: [MessageHandler(filters.TEXT, ingredient_response)], # after next message this function will be called ( user must send text message )
-        },
-        fallbacks=[CommandHandler('stop', stop)] # function which will end conversation
-    )
-    application.add_handler(conv_handler_ingredients) # adding /ingredients command
     #------------------------------------------------------------------
 
     #------------------------------------------------------------------
