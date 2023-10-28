@@ -8,9 +8,6 @@ from data import config
 
 key = config.news_key
 
-categories_list = ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology']
-# ar de en es fr he it nl no pt ru sv ud zh - languages
-
 
 async def get_response(url, params): # function which send a request to the server; url - http request, params - parameters of http request
     # https://docs.aiohttp.org/en/stable/client_quickstart.html
@@ -71,6 +68,6 @@ async def get_spec_news(about): # function which get news by specific topic
     except Exception: # if there is an error, I send a message that there are no news or I output all news which I was able to find before error appeared
 
         if text == 'We have found something for you: \n\n': # if there was no news found, I would return text below
-            return 'Oops, smth went wrong... :( \n\nPlease, try again later!'
+            return 'No news were found :('
 
         return text # returning response 

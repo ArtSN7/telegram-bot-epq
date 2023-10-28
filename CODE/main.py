@@ -31,8 +31,6 @@ markup_weather_options = ReplyKeyboardMarkup([[address_button],[coords_button]],
 reply_keyboard_news = [['/specific_news'], ['/general_news']]
 markup_news = ReplyKeyboardMarkup(reply_keyboard_news, one_time_keyboard=True, resize_keyboard=True)
 
-reply_keyboard_news_topic = [['/general'], ['/business'], ['/entertainment'], ['/health'], ['/science'], ['/sports'],['/technology']]
-markup_news_topic = ReplyKeyboardMarkup(reply_keyboard_news_topic, one_time_keyboard=True, resize_keyboard=True)
 
 #------------------------------------------------------------------
 # recipes buttons 
@@ -72,48 +70,81 @@ markup_profile_language = ReplyKeyboardMarkup(reply_keyboard_profile_language, o
 
 #------------------------------------------------------------------
 # function which work with all inline keyboard buttons
-async def inline_buttons(update, context):
+async def inline_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
 
     # CallbackQueries need to be answered, even if no notification to the user is needed
     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
     await query.answer()
 
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    # food
+
     if query.data == 'es':
-        user = update.effective_user # getting user info from telegram
-        id = user.id #getting user id
+
         await es(id)
-        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
+        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'")
     
     if query.data == 'en':
-        user = update.effective_user # getting user info from telegram
-        id = user.id #getting user id
+
         await en(id)
-        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
+        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'")
     
     if query.data == 'fr':
-        user = update.effective_user # getting user info from telegram
-        id = user.id #getting user id
+
         await fr(id)
-        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
+        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'")
 
     if query.data == 'de':
-        user = update.effective_user # getting user info from telegram
-        id = user.id #getting user id
+
         await de(id)
-        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
+        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'")
 
     if query.data == 'ru':
-        user = update.effective_user # getting user info from telegram
-        id = user.id #getting user id
+
         await ru(id)
-        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
+        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'")
 
     if query.data == 'it':
-        user = update.effective_user # getting user info from telegram
-        id = user.id #getting user id
+
         await it(id)
-        await query.edit_message_text(text=f"Language has been successfully updated to the {query.data}", reply_markup=ReplyKeyboardRemove())
+        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'")
+
+
+    # news
+
+    if query.data == "general":
+        answer = await general(id)
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == "business":
+        answer = await business(id)
+        await query.edit_message_text(text=f"{answer}")
+
+
+    if query.data == "health":
+        answer = await health(id)
+        await query.edit_message_text(text=f"{answer}")
+        
+
+    if query.data == "science":
+        answer = await science(id)
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == "sports":
+        answer = await sports(id)
+        await query.edit_message_text(text=f"{answer}")
+
+    if query.data == "entertainment":
+        answer = await entertainment(id)
+        await query.edit_message_text(text=f"{answer}")
+    
+    if query.data == "technology":
+        answer = await technology(id)
+        await query.edit_message_text(text=f"{answer}")
+        
 
     
 #------------------------------------------------------------------
@@ -286,13 +317,23 @@ async def news_command(update, context):
 
 
 async def general_news(update, context):
-    await update.message.reply_html(rf"Please, choose interesting topic.", reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
+
+    keyboard_news = [
+        [InlineKeyboardButton("general󠁧", callback_data="general")],
+        [InlineKeyboardButton("business", callback_data="business")],
+        [InlineKeyboardButton("entertainment", callback_data="entertainment")],
+        [InlineKeyboardButton("health", callback_data="health")],
+        [InlineKeyboardButton("science", callback_data="science")],
+        [InlineKeyboardButton("sports", callback_data="sports")],
+        [InlineKeyboardButton("technology", callback_data="technology")]
+    ]
+
+    markup_news_topic = InlineKeyboardMarkup(keyboard_news)
+    await update.message.reply_html(rf"Please, choose topic you are intersted in.", reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
 
 # functions connected to the different topics
-async def business(update, context):
-    user = update.effective_user # getting user info from telegram
+async def business(id):
 
-    id = user.id #getting user id
     db_sess = db_session.create_session() # creating connection with database
 
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -301,13 +342,12 @@ async def business(update, context):
 
     func = news.get_news('business', language)
     answer = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
+
+    return answer
 
 
-async def entertainment(update, context):
-    user = update.effective_user # getting user info from telegram
+async def entertainment(id):
 
-    id = user.id #getting user id
     db_sess = db_session.create_session() # creating connection with database
 
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -316,13 +356,11 @@ async def entertainment(update, context):
 
     func = news.get_news('entertainment', language)
     answer = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
+    return answer
 
 
-async def general(update, context):
-    user = update.effective_user # getting user info from telegram
+async def general(id):
 
-    id = user.id #getting user id
     db_sess = db_session.create_session() # creating connection with database
 
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -331,13 +369,11 @@ async def general(update, context):
 
     func = news.get_news('general', language)
     answer = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
+    return answer
 
 
-async def health(update, context):
-    user = update.effective_user # getting user info from telegram
+async def health(id):
 
-    id = user.id #getting user id
     db_sess = db_session.create_session() # creating connection with database
 
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -346,13 +382,11 @@ async def health(update, context):
 
     func = news.get_news('health', language)
     answer = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
+    return answer
 
 
-async def science(update, context):
-    user = update.effective_user # getting user info from telegram
+async def science(id):
 
-    id = user.id #getting user id
     db_sess = db_session.create_session() # creating connection with database
 
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -361,13 +395,11 @@ async def science(update, context):
 
     func = news.get_news('science', language)
     answer = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
+    return answer
 
 
-async def sports(update, context):
-    user = update.effective_user # getting user info from telegram
+async def sports(id):
 
-    id = user.id #getting user id
     db_sess = db_session.create_session() # creating connection with database
 
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -376,13 +408,11 @@ async def sports(update, context):
 
     func = news.get_news('sports', language)
     answer = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
+    return answer
 
 
-async def technology(update, context):
-    user = update.effective_user # getting user info from telegram
+async def technology(id):
 
-    id = user.id #getting user id
     db_sess = db_session.create_session() # creating connection with database
 
     person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
@@ -391,7 +421,7 @@ async def technology(update, context):
 
     func = news.get_news('technology', language)
     answer = await func
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())
+    return answer
 
 
 async def specific_news(update, context):
@@ -416,6 +446,7 @@ async def recipes_command(update, context):
 
 async def cuisine_command(update, context):
     await update.message.reply_html(rf"Please, choose the type of cuisine you are interested in.", reply_markup=markup_cuisine_type) # chose between different cuisines
+
 
 # adding different cuisines
 async def italian_cuisine(update, context):
@@ -553,7 +584,7 @@ async def user_profile(update, context):
     await update.message.reply_html(rf"Please, choose what you want to change", reply_markup=markup_profile_change)
 
 
- # changing user's language
+# changing user's language
 async def change_user_lang(update, context):
     user = update.effective_user # getting user info from telegram
 
@@ -715,13 +746,7 @@ def main():
     # NEWS COMMAND
     application.add_handler(CommandHandler("news", news_command))
     application.add_handler(CommandHandler("general_news", general_news))
-    application.add_handler(CommandHandler("business", business))
-    application.add_handler(CommandHandler("entertainment", entertainment))
-    application.add_handler(CommandHandler("general", general))
-    application.add_handler(CommandHandler("health", health))
-    application.add_handler(CommandHandler("science", science))
-    application.add_handler(CommandHandler("sports", sports))
-    application.add_handler(CommandHandler("technology", technology))
+
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('specific_news', specific_news)],
         states={
@@ -804,14 +829,6 @@ def main():
     application.add_handler(CommandHandler("profile", user_profile))
     application.add_handler(CommandHandler("change_language", change_user_lang))
 
-
-    # languages 
-    application.add_handler(CommandHandler("en", en))
-    application.add_handler(CommandHandler("de", de))
-    application.add_handler(CommandHandler("fr", fr))
-    application.add_handler(CommandHandler("it", it))
-    application.add_handler(CommandHandler("es", es))
-    application.add_handler(CommandHandler("ru", ru))
     #------------------------------------------------------------------
 
 
