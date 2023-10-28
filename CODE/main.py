@@ -193,7 +193,7 @@ async def inline_buttons(update, context):
 #------------------------------------------------------------------
 # help function wich explains abilities of all functions in the bot
 async def help_command(update, context):
-    await update.message.reply_text('1', reply_markup=ReplyKeyboardRemove())
+    await update.message.reply_text('Please, share your thoughts with us:\n\nhttps://forms.gle/mHidQLY62DiZVeHz8', reply_markup=ReplyKeyboardRemove())
 
 
 #------------------------------------------------------------------
