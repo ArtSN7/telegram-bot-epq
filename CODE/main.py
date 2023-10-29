@@ -40,7 +40,7 @@ reply_keyboard_recipe_type = [['/by_cuisine'], ['/by_name']]
 markup_recipe_type = ReplyKeyboardMarkup(reply_keyboard_recipe_type, one_time_keyboard=True, resize_keyboard=True)
 
 #------------------------------------------------------------------
-# evetns buttond
+# evetns buttons
 markup_event_loc = ReplyKeyboardMarkup([[btn_loc]], one_time_keyboard=True, resize_keyboard=True) # function which will show this button
 
 reply_keyboard_events_type = [['/Real'], ['/Virtual']]
@@ -73,10 +73,10 @@ async def inline_buttons(update, context):
 
     # languages
 
-    if query.data == 'es':
+    if query.data == 'es': # if inline button with this callback had been used, then : ( the same idea with other if part in this function )
 
-        await es(id)
-        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'")
+        await es(id) # changing language
+        await query.edit_message_text(text=f"Language has been successfully updated to the '{query.data}'") # sending message about this
     
     if query.data == 'en':
 
@@ -107,8 +107,8 @@ async def inline_buttons(update, context):
     # news
 
     if query.data == "general":
-        answer = await general(id)
-        await query.edit_message_text(text=f"{answer}")
+        answer = await general(id) # getting response 
+        await query.edit_message_text(text=f"{answer}") # sending response to the user
 
     if query.data == "business":
         answer = await business(id)
@@ -139,8 +139,8 @@ async def inline_buttons(update, context):
     # cuisine types
         
     if query.data == 'italian':
-        answer = await italian_cuisine()
-        await query.edit_message_text(text=f"{answer}")
+        answer = await italian_cuisine() # getting response 
+        await query.edit_message_text(text=f"{answer}") # sending response to the user
 
     if query.data == 'british':
         answer = await british_cuisine()
@@ -191,7 +191,7 @@ async def inline_buttons(update, context):
 
 
 #------------------------------------------------------------------
-# help function wich explains abilities of all functions in the bot
+# help function wich explains abilities of all functions in the bot 
 async def help_command(update, context):
     await update.message.reply_text('Please, share your thoughts with us:\n\nhttps://forms.gle/mHidQLY62DiZVeHz8', reply_markup=ReplyKeyboardRemove())
 
@@ -229,20 +229,22 @@ async def flight_command_0(update, context):
 
     url = "https://www.flightright.co.uk/wp-content/uploads/sites/2/2023/02/where-can-i-find-my-flight-number.jpg"
     await context.bot.send_photo(update.message.chat_id, url, caption="") # seding example of ticket
-    return 1
+    return 1 # showing what function must be called next
 
 async def flight_command_1(update, context):
-    context.user_data['airport'] = update.message.text.upper() # upper is needed if user inputed in a wrong format
-    await update.message.reply_text("Thank you, now send us you flight code, which is also on your ticket.", reply_markup=ReplyKeyboardRemove())
-    return 2
+    context.user_data['airport'] = update.message.text.upper() # storing airport name , upper is needed if user inputed in a wrong format
+    await update.message.reply_text("Thank you, now send us you flight code, which is also on your ticket.", reply_markup=ReplyKeyboardRemove()) # asking for the flight code
+    return 2 # showing what function must be called next
 
 async def flight_command_2(update, context):
-    context.user_data['flight'] = update.message.text
+    context.user_data['flight'] = update.message.text # storing flight code
 
-    answer = await flight.get_flight_info(context.user_data["flight"], context.user_data["airport"])
-    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove())
+    answer = await flight.get_flight_info(context.user_data["flight"], context.user_data["airport"]) # calling function which will provide info about this flight 
 
-    context.user_data.clear()
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove()) # sending response to the user
+
+    context.user_data.clear() # deleting all information about this user
+
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
 
 
@@ -250,7 +252,7 @@ async def flight_command_2(update, context):
 # events function
 
 async def events_command(update, context):
-    await update.message.reply_html(rf"To find events near you, please, send us your location!", reply_markup=markup_event_loc)
+    await update.message.reply_html(rf"To find events near you, please, send us your location!", reply_markup=markup_event_loc) # sending button with location
     return 1
 
 
@@ -258,40 +260,43 @@ async def events_response(update, context):
 
     long, lat = update.message.location.longitude, update.message.location.latitude # getting user coordinates 
 
-    context.user_data['long'] = long
-    context.user_data['lat'] = lat
-    await update.message.reply_html(rf"Please, choose the type of event!", reply_markup=markup_events_type)
+    context.user_data['long'] = long # storing longitude
+    context.user_data['lat'] = lat # storing latitude 
 
-    return ConversationHandler.END
+    await update.message.reply_html(rf"Please, choose the type of event!", reply_markup=markup_events_type) # asking user to choose type of event ( Real or Virtual )
+
+    return ConversationHandler.END # finishing conversation
+
 
 async def real_event_type(update, context): # if event type is real
-    context.user_data['type'] = "Real"
-    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date)
+    context.user_data['type'] = "Real" # storing information about event type
+    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date) # asking to choose date of event
     
+
 async def virtual_event_type(update, context): # if event type is virtual
-    context.user_data['type'] = "Virtual"
-    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date)
+    context.user_data['type'] = "Virtual" # storing information about event type
+    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date) # asking to choose date of event
 
-
+ # dates of event
 async def today_event(update, context): 
-    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "today")
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "today") # calling main function from events.py
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def tomorrow_event(update, context): 
-    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "tomorrow")
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "tomorrow") # calling main function from events.py
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def this_week_event(update, context): 
-    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "week")
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "week") # calling main function from events.py
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def next_week_event(update, context): 
-    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "next_week")
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) 
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "next_week") # calling main function from events.py
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def all_event(update, context): 
-    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "all")
-    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())  
+    answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "all") # calling main function from events.py
+    await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())  # sending response to user
 
 
 #------------------------------------------------------------------
@@ -326,15 +331,15 @@ async def quote_command(update, context):
 
 async def weather_command(update, context):
     await update.message.reply_html(rf"Please, choose how you will send us your location ( by sending text address or by sharing your location using button )",
-                                    reply_markup=markup_weather_options)
+                                    reply_markup=markup_weather_options) # asking how user will send location
 
 async def weather_command_coords(update, context):
     await update.message.reply_html(rf"To analyse data, you need to send your current location (use button below)",
-                                    reply_markup=markup_weather_loc)
+                                    reply_markup=markup_weather_loc) # asking user to send coordinates by innate telegram function
     return 1
 
 async def weather_command_address(update, context):
-    await update.message.reply_html(rf"To analyse data, you need to send address", reply_markup=ReplyKeyboardRemove())
+    await update.message.reply_html(rf"To analyse data, you need to send address", reply_markup=ReplyKeyboardRemove()) # asking user to send coordinates by text ( King' school canterbury , for example )
     return 1
 
 async def weather_command_response_coords(update, context): # function which works with longitude and latitude 
@@ -366,9 +371,9 @@ async def general_news(update, context):
         [InlineKeyboardButton("science", callback_data="science")],
         [InlineKeyboardButton("sports", callback_data="sports")],
         [InlineKeyboardButton("technology", callback_data="technology")]
-    ]
+    ] # buttons which can be used 
 
-    markup_news_topic = InlineKeyboardMarkup(keyboard_news)
+    markup_news_topic = InlineKeyboardMarkup(keyboard_news) # adding this buttons to the text
     await update.message.reply_html(rf"Please, choose topic you are intersted in.", reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
 
 # functions connected to the different topics
@@ -509,14 +514,15 @@ async def cuisine_command(update, context):
 
 
 # adding different cuisines
-async def italian_cuisine():
-    func = recipes.get_rec_by_cuisine("Italian")
-    answer, url = await func
 
-    if url != "...":
-        return f"{answer}\n\n{url}"
+async def italian_cuisine():
+    func = recipes.get_rec_by_cuisine("Italian") # getting response 
+    answer, url = await func # declaring data
+
+    if url != "...": # if there is a photo ( no errors )
+        return f"{answer}\n\n{url}" # send text with photo
     else:
-        return f"{answer}"
+        return f"{answer}" # send text without photo
 
 
 async def british_cuisine():
