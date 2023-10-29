@@ -217,7 +217,7 @@ async def start_command(update, context):
         db_sess.commit() # commiting and updating our database, from this moment there is an information about this specific user in the database
 
     # sending message as an asnwer to the start button
-    await update.message.reply_html(f"Hello, {user.mention_html()}!\n\nI am AUXXIbot, but friends call me AUX, so you can call me like this ;D\n\nI am your personal assistant that can simplify your life, moreover, you can ask me whatever you want and recieve an answer!\n\nTo see more of my power try /help button :)")
+    await update.message.reply_html(f"Hello, {user.mention_html()}!\n\nI am AUXXIbot, but friends call me AUX, so you can call me like this ;D\n\nI am your personal assistant that can simplify your life, moreover, you can ask me whatever you want and recieve an answer!\n\nTo see more of my power try buttons in MENU :)")
 
 
 
@@ -375,6 +375,9 @@ async def general_news(update, context):
 
     markup_news_topic = InlineKeyboardMarkup(keyboard_news) # adding this buttons to the text
     await update.message.reply_html(rf"Please, choose topic you are intersted in.", reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
+    
+    await update.message.reply_text('', reply_markup=ReplyKeyboardRemove()) # removing keyboard eventhough there will be error 
+
 
 # functions connected to the different topics
 async def business(id):

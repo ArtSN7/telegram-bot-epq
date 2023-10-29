@@ -38,7 +38,7 @@ async def get_news(category, lang): # function which gets news by category
     except Exception as e: # if there is a mistake
 
         if text == 'We have found something for you: \n\n':
-            return 'Oops, smth went wrong... :(\n\nPlease, try again later!'
+            return 'Nothing was found :(\n\nTry to change language to see more news'
         return text
 
 
@@ -68,6 +68,6 @@ async def get_spec_news(about): # function which get news by specific topic
     except Exception: # if there is an error, I send a message that there are no news or I output all news which I was able to find before error appeared
 
         if text == 'We have found something for you: \n\n': # if there was no news found, I would return text below
-            return 'No news were found :('
+            return 'No news around this field was found :('
 
         return text # returning response 
