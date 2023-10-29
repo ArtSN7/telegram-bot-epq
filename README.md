@@ -18,7 +18,7 @@ In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** 
 
 
 
-**[• Library documentation](https://docs.python-telegram-bot.org/en/v20.6/)**
+**[• Library Documentation](https://docs.python-telegram-bot.org/en/v20.6/)**
 
 --
 
