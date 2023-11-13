@@ -103,6 +103,16 @@ In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** 
 **[• Flight](https://docs.flightapi.io/flight-tracking-api#response)**
 
 
+--
+
+### Useful link for deepere understanding:
+
+    https://pypi.org/project/deep-translator/
+
+
+
+
+    
 
 ## FUNCTIONS:
 

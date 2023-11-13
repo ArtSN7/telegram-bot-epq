@@ -3,7 +3,7 @@
 from deep_translator import GoogleTranslator
 
 # en it de fr ru es
-# https://pypi.org/project/translate/
+# https://pypi.org/project/deep-translator/
 
 async def translating(lang, text): # lang - user's language to which I need to translate; text - text which need to be translated
     try: # trying to catch an error
