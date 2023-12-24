@@ -5,6 +5,8 @@
 
 ## Useful information about the project
 
+There is documentation for the project in **[DOCUMENTATION.md](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#documentation)**
+
 There is a guide how to write your own telegram-bot with examples in **[GUIDE.md](https://github.com/ArtSN7/telegram-bot/blob/main/GUIDE.md)**
 
 In the folder **[CODE](https://github.com/ArtSN7/telegram-bot/tree/main/CODE)** you can find main.py ( which runs the bot ) and folders:
