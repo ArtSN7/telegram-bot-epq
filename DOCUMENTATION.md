@@ -7,15 +7,25 @@
 ---
 
 **[Before Reading](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#before-reading)**
+
 **[Introduction](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#introduction)**
+
 **[Telegram](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#telegram)**
+
 **[What Is A Telegram-bot](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#what-is-a-telegram-bot)**
+
 **[What Problems Can Be Solved By Telegram-bot](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#what-problems-can-be-solved-by-telegram-bot)**
+
 **[Database And Related Files](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#database-and-related-files)**
+
 **[ORM-models](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#orm-models)**
+
 **[user.py](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#userpy)**
+
 **[all_models.py](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#all_modelspy)**
+
 **[db_session.py](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#db_sessionpy)**
+
 **[config.py](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#configpy)**
 
 
