@@ -70,7 +70,8 @@ Everything, it is limited only by imagination. Here are some examples:
 
 ---
 
-![Untitled](DOCUMENTATION%200b3ff7f1d810453ba76f0a85a9c51a23/Untitled.png)
+<img width="287" alt="Untitled" src="https://github.com/ArtSN7/telegram-bot/assets/102421671/040ec921-e407-494f-92b7-de58fd6b8092">
+
 
 db — to store a single database file
 data — to store the classes and functions needed to interact with the database
