@@ -6,6 +6,8 @@
 
 ---
 
+**[Before Reading](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#before-reading)**
+
 [Before Reading](https://www.notion.so/Before-Reading-9d5991c6102e4f3796632d4b2cd6d2e0?pvs=21) 
 
 [Introduction](https://www.notion.so/Introduction-eacfeaed09c54a8b9f00fdd79e74b5cc?pvs=21) 
