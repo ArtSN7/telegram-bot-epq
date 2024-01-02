@@ -5,7 +5,17 @@
 
 ## Useful information about the project
 
+! NOT FOR THIS STAGE OF THE PROJECT, SEE OTHER DOCUMENTATION:
 There is documentation for the project in **[DOCUMENTATION.md](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#documentation)**
+
+DOCUMENTATION FOR THE FIRST RELEASE:
+**[documentation.docx]()**
+
+
+GUIDE HOW TO START WITH MY BOT:
+**[telegram_guide.pdf]()**
+
+
 
 There is a guide how to write your own telegram-bot with examples in **[GUIDE.md](https://github.com/ArtSN7/telegram-bot/blob/main/GUIDE.md)**
 
