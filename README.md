@@ -15,6 +15,7 @@ DOCUMENTATION FOR THE FIRST RELEASE:
 GUIDE HOW TO START WITH MY BOT:
 **[telegram_guide.pdf]()**
 
+NAME OF THE BOT: @AUXXIbot
 
 
 There is a guide how to write your own telegram-bot with examples in **[GUIDE.md](https://github.com/ArtSN7/telegram-bot/blob/main/GUIDE.md)**
