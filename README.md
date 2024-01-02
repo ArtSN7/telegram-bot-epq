@@ -9,11 +9,11 @@
 There is documentation for the project in **[DOCUMENTATION.md](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md#documentation)**
 
 DOCUMENTATION FOR THE FIRST RELEASE:
-**[documentation.docx]()**
+**[documentation.docx](https://github.com/ArtSN7/telegram-bot/blob/main/documentation.docx)**
 
 
 GUIDE HOW TO START WITH MY BOT:
-**[telegram_guide.pdf]()**
+**[telegram_guide.pdf](https://github.com/ArtSN7/telegram-bot/blob/main/telegram_guide.pdf)**
 
 NAME OF THE BOT: @AUXXIbot
 
