@@ -286,7 +286,8 @@ Gpt function provides to user an opportunity to ask questions to the Open-AI cre
 
 Lines of code are explained in the code by comments.
 
-![Untitled](DOCUMENTATION%200b3ff7f1d810453ba76f0a85a9c51a23/Untitled%201.png)
+<img width="360" alt="Untitled 1" src="https://github.com/ArtSN7/telegram-bot/assets/102421671/71a5def0-3b43-45ab-8704-fc349d8bc01c">
+
 
 ### Links
 
