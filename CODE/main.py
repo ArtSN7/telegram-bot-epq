@@ -15,7 +15,7 @@ from telegram import ReplyKeyboardRemove
 
 from data import config
 
-from functions import gpt, quote, weather, news, recipes, events, flight
+from functions import gpt, quote, weather, news, recipes, events, flight, translater
 
 #------------------------------------------------------------------
 # weather buttond
@@ -70,6 +70,11 @@ async def inline_buttons(update, context):
 
     user = update.effective_user # getting user info from telegram
     id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
 
     # languages
 
@@ -139,51 +144,67 @@ async def inline_buttons(update, context):
     # cuisine types
         
     if query.data == 'italian':
-        answer = await italian_cuisine() # getting response 
+        answer = await italian_cuisine() # getting response
+
+        answer = await translater.translating(lang, answer)
+
         await query.edit_message_text(text=f"{answer}") # sending response to the user
 
     if query.data == 'british':
         answer = await british_cuisine()
+
+        answer = await translater.translating(lang, answer)
+
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'chinese':
         answer = await chinese_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'european':
         answer = await european_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'french':
         answer = await french_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'german':
         answer = await german_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'greek':
         answer = await greek_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'indian':
         answer = await indian_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'japanese':
         answer = await japanese_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'korean':
         answer = await korean_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'mexican':
         answer = await mexican_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
     if query.data == 'thai':
         answer = await thai_cuisine()
+        answer = await translater.translating(lang, answer)
         await query.edit_message_text(text=f"{answer}")
 
 
@@ -193,6 +214,15 @@ async def inline_buttons(update, context):
 #------------------------------------------------------------------
 # help function wich explains abilities of all functions in the bot 
 async def help_command(update, context):
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
     await update.message.reply_text('Please, share your thoughts with us:\n\nhttps://forms.gle/mHidQLY62DiZVeHz8', reply_markup=ReplyKeyboardRemove())
 
 
@@ -225,15 +255,38 @@ async def start_command(update, context):
 # flight function
 
 async def flight_command_0(update, context):
-    await update.message.reply_text("Please, send us airport code from your ticket. Just to remind, EK104 ( on the photo ) is a airport code (EK) and flight number(104)", reply_markup=ReplyKeyboardRemove())
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, send us airport code from your ticket. Just to remind, EK104 ( on the photo ) is a airport code (EK) and flight number(104)")
+
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove())
 
     url = "https://www.flightright.co.uk/wp-content/uploads/sites/2/2023/02/where-can-i-find-my-flight-number.jpg"
     await context.bot.send_photo(update.message.chat_id, url, caption="") # seding example of ticket
     return 1 # showing what function must be called next
 
 async def flight_command_1(update, context):
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Thank you, now send us you flight code, which is also on your ticket.")
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove())
+
     context.user_data['airport'] = update.message.text.upper() # storing airport name , upper is needed if user inputed in a wrong format
-    await update.message.reply_text("Thank you, now send us you flight code, which is also on your ticket.", reply_markup=ReplyKeyboardRemove()) # asking for the flight code
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove()) # asking for the flight code
     return 2 # showing what function must be called next
 
 async def flight_command_2(update, context):
@@ -252,62 +305,179 @@ async def flight_command_2(update, context):
 # events function
 
 async def events_command(update, context):
-    await update.message.reply_html(rf"To find events near you, please, send us your location!", reply_markup=markup_event_loc) # sending button with location
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "To find events near you, please, send us your location!")
+
+    await update.message.reply_html(answer, reply_markup=markup_event_loc) # sending button with location
     return 1
 
 
 async def events_response(update, context):
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, choose the type of event!")
 
     long, lat = update.message.location.longitude, update.message.location.latitude # getting user coordinates 
 
     context.user_data['long'] = long # storing longitude
     context.user_data['lat'] = lat # storing latitude 
 
-    await update.message.reply_html(rf"Please, choose the type of event!", reply_markup=markup_events_type) # asking user to choose type of event ( Real or Virtual )
+    
+    await update.message.reply_html(answer, reply_markup=markup_events_type) # asking user to choose type of event ( Real or Virtual )
 
     return ConversationHandler.END # finishing conversation
 
 
 async def real_event_type(update, context): # if event type is real
     context.user_data['type'] = "Real" # storing information about event type
-    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date) # asking to choose date of event
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, now choose the date of event!")
+
+
+    await update.message.reply_html(answer, reply_markup=markup_events_date) # asking to choose date of event
     
 
 async def virtual_event_type(update, context): # if event type is virtual
     context.user_data['type'] = "Virtual" # storing information about event type
-    await update.message.reply_html(rf"Please, now choose the date of event!", reply_markup=markup_events_date) # asking to choose date of event
+
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, now choose the date of event!")
+
+    await update.message.reply_html(answer, reply_markup=markup_events_date) # asking to choose date of event
+
 
  # dates of event
 async def today_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "today") # calling main function from events.py
+
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
+
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def tomorrow_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "tomorrow") # calling main function from events.py
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def this_week_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "week") # calling main function from events.py
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def next_week_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "next_week") # calling main function from events.py
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to user
 
 async def all_event(update, context): 
     answer = await events.main_events((context.user_data['long'], context.user_data['lat']), context.user_data['type'], "all") # calling main function from events.py
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove())  # sending response to user
 
 
 #------------------------------------------------------------------
 # chat-gpt function
 async def gpt_command(update, context):
-    await update.message.reply_text('Please, send a message with your question.', reply_markup=ReplyKeyboardRemove()) # asking to send a messagew with question 
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, 'Please, send a message with your question.')
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove()) # asking to send a messagew with question 
     return 1 # showing that the next function must be message_answer(update, context)
 
 async def message_answer(update, context):
     txt = update.message.text # gettin text which was sent by user
-    await update.message.reply_text("Please, wait. Your request might take 2-15 seconds.")
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, wait. Your request might take 2-15 seconds.")
+
+    
+
+    await update.message.reply_text(answer)
     answer = gpt.question_gpt(txt) # asking gpt function to give an answer - if something is wrong, it will return error
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
     return ConversationHandler.END # finishing conversation, so the user next message won't be connected to this function
@@ -319,7 +489,18 @@ async def message_answer(update, context):
 async def quote_command(update, context):
     func = quote.quote() # declaring function call ( procedure that is needed to work with async requests )
     answer = await func # getting response from function
-    await update.message.reply_text(f'{answer[0]}', reply_markup=ReplyKeyboardRemove()) # sending random quote to user
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    txt = await translater.translating(lang, answer[0])
+
+    await update.message.reply_text(f'{txt}', reply_markup=ReplyKeyboardRemove()) # sending random quote to user
 
     if answer[1] != "": # if there is a link with author's photo, then we send it
         await context.bot.send_photo(update.message.chat_id, answer[1], caption="") # sending link to the photo ( tg will represent it )
@@ -330,38 +511,123 @@ async def quote_command(update, context):
 # weather function
 
 async def weather_command(update, context):
-    await update.message.reply_html(rf"Please, choose how you will send us your location ( by sending text address or by sharing your location using button )",
-                                    reply_markup=markup_weather_options) # asking how user will send location
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, choose how you will send us your location ( by sending text address or by sharing your location using button )")
+
+    await update.message.reply_html(answer, reply_markup=markup_weather_options) # asking how user will send location
+
 
 async def weather_command_coords(update, context):
-    await update.message.reply_html(rf"To analyse data, you need to send your current location (use button below)",
-                                    reply_markup=markup_weather_loc) # asking user to send coordinates by innate telegram function
+
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "To analyse data, you need to send your current location (use button below)")
+
+    
+
+    await update.message.reply_html(answer, reply_markup=markup_weather_loc) # asking user to send coordinates by innate telegram function
     return 1
 
+
 async def weather_command_address(update, context):
-    await update.message.reply_html(rf"To analyse data, you need to send address", reply_markup=ReplyKeyboardRemove()) # asking user to send coordinates by text ( King' school canterbury , for example )
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "To analyse data, you need to send address")
+
+    await update.message.reply_html(answer, reply_markup=ReplyKeyboardRemove()) # asking user to send coordinates by text ( King' school canterbury , for example )
     return 1
+
 
 async def weather_command_response_coords(update, context): # function which works with longitude and latitude 
     long, lang = update.message.location.longitude, update.message.location.latitude # getting user coordinates 
     func = weather.weather_coords((long, lang)) # calling function
     answer = await func # getting response 
+
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
+
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to the user
     return ConversationHandler.END # ending conversation
+
 
 async def weather_command_response_address(update, context): # function which works with address
     func = weather.weather_address(update.message.text) # calling function
     answer = await func # getting answer
+
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
+
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending response to the user
     return ConversationHandler.END # ending conversation 
+
 
 #------------------------------------------------------------------
 # news function 
 async def news_command(update, context):
-    await update.message.reply_html(rf"Please, choose the type of news you want to see.", reply_markup=markup_news) # chose between general and specific
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, choose the type of news you want to see.")
+
+
+    await update.message.reply_html(answer, reply_markup=markup_news) # chose between general and specific
 
 
 async def general_news(update, context):
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, choose topic you are intersted in.")
 
     keyboard_news = [
         [InlineKeyboardButton("general󠁧", callback_data="general")],
@@ -374,7 +640,7 @@ async def general_news(update, context):
     ] # buttons which can be used 
 
     markup_news_topic = InlineKeyboardMarkup(keyboard_news) # adding this buttons to the text
-    await update.message.reply_html(rf"Please, choose topic you are intersted in.", reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
+    await update.message.reply_html(answer, reply_markup=markup_news_topic) # if user had chosen general news, he would need to choose topic
     
     await update.message.reply_text('', reply_markup=ReplyKeyboardRemove()) # removing keyboard eventhough there will be error 
 
@@ -473,7 +739,16 @@ async def technology(id):
 
 
 async def specific_news(update, context):
-    await update.message.reply_text("Enter the topic you are interested in (for example, Microsoft)", reply_markup=ReplyKeyboardRemove())
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Enter the topic you are interested in (for example, Microsoft)")
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove())
     return 1
 
 
@@ -488,7 +763,18 @@ async def specific_news_response(update, context):
 #------------------------------------------------------------------
 # recipes function
 async def recipes_command(update, context):
-    await update.message.reply_text(rf"Please, choose by which parameter you want to choose recipe", reply_markup=markup_recipe_type) # chose between different types of request
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, choose by which parameter you want to choose recipe")
+
+    await update.message.reply_text(answer, reply_markup=markup_recipe_type) # chose between different types of request
 
 
 
@@ -512,8 +798,18 @@ async def cuisine_command(update, context):
 
     markup_cuisine_type = InlineKeyboardMarkup(keyboard_cuisine_type)
 
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
 
-    await update.message.reply_text(rf"Please, choose the type of cuisine you are interested in.", reply_markup=markup_cuisine_type) # chose between different cuisines
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, choose the type of cuisine you are interested in.")
+
+
+    await update.message.reply_text(answer, reply_markup=markup_cuisine_type) # chose between different cuisines
 
 
 # adding different cuisines
@@ -636,14 +932,38 @@ async def thai_cuisine():
         return f"{answer}"
 
 
+
 # dish name 
 async def dish_name(update, context):
-    await update.message.reply_text(f"Please, send a name of the dish you want to cook, for example, pasta. ( in english )", reply_markup=ReplyKeyboardRemove())
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, send a name of the dish you want to cook, for example, pasta. ( in english )")
+    
+    await update.message.reply_text(answer, reply_markup=ReplyKeyboardRemove())
     return 1 # showing bot that next message must be read by dish_name_response function
+
+
 
 async def dish_name_response(update, context):
     txt = update.message.text # gettin text which was sent by user
     answer, url = await recipes.get_rec_by_name(txt) # sending a request
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, answer)
 
     await update.message.reply_text(f"{answer}", reply_markup=ReplyKeyboardRemove()) # sending an answer to user
     if url != '...':
@@ -652,11 +972,24 @@ async def dish_name_response(update, context):
 #------------------------------------------------------------------
 
 
+
 #------------------------------------------------------------------
 # Profile connected function 
 
 async def user_profile(update, context):
-    await update.message.reply_html(rf"Please, choose what you want to change", reply_markup=markup_profile_change)
+
+    user = update.effective_user # getting user info from telegram
+    id = user.id #getting user id
+
+    db_sess = db_session.create_session() # creating connection with database
+    person = db_sess.query(User).filter(User.tg_id == id).first() # searching for the data in the database which has the same id as the tg user
+    
+    lang = person.language # getting language
+
+    answer = await translater.translating(lang, "Please, choose what you want to change")
+
+    await update.message.reply_html(answer, reply_markup=markup_profile_change)
+
 
 
 # changing user's language
@@ -682,7 +1015,9 @@ async def change_user_lang(update, context):
     markup_profile_language = InlineKeyboardMarkup(keyboard_language)
 
 
-    await update.message.reply_html(rf"Please, choose language to which you want to switch. Your current language is '{lang}'", reply_markup=markup_profile_language)
+    answer = await translater.translating(lang, f"Please, choose language to which you want to switch. Your current language is '{lang}'")
+
+    await update.message.reply_html(answer, reply_markup=markup_profile_language)
 
 
 # language functions
