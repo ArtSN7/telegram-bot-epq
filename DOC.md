@@ -2,33 +2,7 @@
 
 ---
 
-# Content map:
 
----
-
-[Before Reading](https://www.notion.so/Before-Reading-9d5991c6102e4f3796632d4b2cd6d2e0?pvs=21) 
-
-[Introduction](https://www.notion.so/Introduction-eacfeaed09c54a8b9f00fdd79e74b5cc?pvs=21) 
-
-     [Telegram](https://www.notion.so/Telegram-d25ee15b51a2410398786dd9bcf53119?pvs=21) 
-
-[What is a telegram-bot](https://www.notion.so/What-is-a-telegram-bot-9be1c2e77702404aa2daaefa9049ba82?pvs=21) 
-
-[What problems can be solved by telegram-bot](https://www.notion.so/What-problems-can-be-solved-by-telegram-bot-5251199a809e451a9d7b4fee83dcec57?pvs=21) 
-
-[Database And Related Files](https://www.notion.so/Database-And-Related-Files-7721097b92eb4f78a32dc9bf563f6fc0?pvs=21) 
-
-[ORM-models](https://www.notion.so/ORM-models-837921ebee644af1894c5a2d5bd67ab3?pvs=21) 
-
-[user.py](https://www.notion.so/user-py-c8ed060d4b9a47afb6b157a32f15b8ad?pvs=21) 
-
-[all_models.py](https://www.notion.so/all_models-py-f8786e2e91ff4ab08b966cb0d1dd136a?pvs=21) 
-
-[db_session.py](https://www.notion.so/db_session-py-39b3fbdd962e4e43a0004b6f69dc724d?pvs=21) 
-
-[config.py](https://www.notion.so/config-py-ded297f98a3c403480e18d2ed93d0b5f?pvs=21) 
-
----
 
 # Before Reading
 
