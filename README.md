@@ -5,6 +5,8 @@
 
 ## Useful information about the project
 
+IF YOU WANT TO TEST THE BOT, PLEASE, RUN IT ON YOUR OWN MACHINE, OR TEXT ME ON TEAMS AND I WILL UPLOAD IT TO THE SERVER
+
 DOCUMENTATION:
 **[DOCUMENTATION.md](https://github.com/ArtSN7/telegram-bot/blob/main/DOCUMENTATION.md)**
 
