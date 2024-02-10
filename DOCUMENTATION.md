@@ -42,7 +42,8 @@ Everything, it is limited only by imagination. Here are some examples:
 
 ---
 
-![Untitled](DOCUMENTATION%200b3ff7f1d810453ba76f0a85a9c51a23/Untitled.png)
+<img width="287" alt="Untitled" src="https://github.com/ArtSN7/telegram-bot/assets/102421671/2c0f131f-b677-4ed1-8249-9289b7d79fe2">
+
 
 db — to store a single database file
 data — to store the classes and functions needed to interact with the database
@@ -284,7 +285,8 @@ Gpt function provides to user an opportunity to ask questions to the Open-AI cre
 
 Lines of code are explained in the code by comments.
 
-![Untitled](DOCUMENTATION%200b3ff7f1d810453ba76f0a85a9c51a23/Untitled%201.png)
+<img width="360" alt="Untitled 1" src="https://github.com/ArtSN7/telegram-bot/assets/102421671/4e724af9-6f32-4b0e-8f4c-107e17ba8f0c">
+
 
 ### Links
 
