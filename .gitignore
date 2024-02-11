@@ -5,3 +5,6 @@
 __pycache__
 
 CODE/data/keys.py
+
+.idea
+venv
