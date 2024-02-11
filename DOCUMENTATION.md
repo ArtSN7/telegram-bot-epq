@@ -8,7 +8,6 @@
 
 **GIT-HUB link - [https://github.com/ArtSN7/telegram-bot](https://github.com/ArtSN7/telegram-bot)**
 
-**Presentation - [click](https://docs.google.com/presentation/d/1zW4qY62hreSH9HOeFIs154F6oV6w4LMu5XsAehd-jx4/edit?usp=sharing)**
 
 **Documentation of how to write telegram-bots with theory and examples you might find in the repository in the file GUIDE.md. It will be useful for you to check it first before reading documentation, as it will help you deeply understand how does it all work.**
 
