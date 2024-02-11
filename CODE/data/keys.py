@@ -1,7 +1,7 @@
 dict = {
     "tg_key": "6534440693:AAF4IewO6StmIpLaKebPiUmiRCoi4uCTDPY",
 
-    "gpt_key": "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",
+    "gpt_key": "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",
 
     "weather_key": "6f24844bb0dd708bcdbc1bc7fa94bc08",
 
