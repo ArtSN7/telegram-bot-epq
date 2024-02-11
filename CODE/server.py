@@ -1237,7 +1237,7 @@ def main():
 #------------------------------------------------------------------
 if __name__ == '__main__': # part of the code that set up the environmet 
     
-    db_session.global_init("code/db/data.db") # connecting database in the main code code/db/data.db - path to reach the file
+    db_session.global_init("CODE/db/data.db") # connecting database in the main code code/db/data.db - path to reach the file
 
 
     if os.name == 'nt': # if os is windows
