@@ -4,7 +4,6 @@
 # ignore ALL files in ANY directory named __pycache__
 __pycache__
 
-CODE/data/keys.py
 
 .idea
 venv
