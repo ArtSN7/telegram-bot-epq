@@ -1,8 +1,5 @@
 # function which show news
 
-import requests
-import os
-import asyncio
 import aiohttp
 from data import config
 

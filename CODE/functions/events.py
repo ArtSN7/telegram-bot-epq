@@ -1,6 +1,5 @@
 # function that shows events near the place
 
-import requests
 import aiohttp
 import asyncio
 import os

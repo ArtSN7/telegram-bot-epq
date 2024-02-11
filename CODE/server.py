@@ -2,15 +2,14 @@ import datetime
 
 import asyncio
 import os
-import aiohttp
 from data import db_session
 from data.user import User
 
 from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler, ConversationHandler
 from telegram import ReplyKeyboardMarkup, KeyboardButton
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import CallbackQueryHandler, ContextTypes
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import CallbackQueryHandler
 from telegram import ReplyKeyboardRemove
 
 from data import config

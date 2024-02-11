@@ -1,6 +1,5 @@
 # function which provides information about your flight
 
-import requests
 import aiohttp
 import asyncio
 import os

@@ -1,8 +1,6 @@
 # function which provides informstion about weather in specific location
 
 from data import config
-import requests
-import asyncio
 import aiohttp
 
 

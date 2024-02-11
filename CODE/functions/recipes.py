@@ -1,8 +1,6 @@
 # function which shows recipes
 
-import requests
-import os
-import asyncio
+
 import aiohttp
 import random
 

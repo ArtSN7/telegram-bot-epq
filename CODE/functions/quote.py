@@ -1,6 +1,5 @@
 # function which gets a random quote
 
-import requests
 from .wikipedia_get_photo import get_wiki_image
 import aiohttp
 import asyncio

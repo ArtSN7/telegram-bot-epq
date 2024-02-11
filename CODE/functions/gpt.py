@@ -1,9 +1,6 @@
 # chat-gpt function with open-ai API
 from data import config
 import openai
-import os
-import pandas as pd
-import time
 
 #open-ai key
 openai.api_key = config.gpt_key

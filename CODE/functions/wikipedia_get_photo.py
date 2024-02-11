@@ -2,8 +2,6 @@
 
 
 import wikipedia
-import requests
-import json
 import aiohttp
 import os
 import asyncio
